@@ -4,11 +4,17 @@ set(name astron.libwasm)
 project(${name})
 include_directories(src)
 
+if (NOT EMSCRIPTEN)
+    return() # Only building with Emscripten
+endif()
+
 set(CMAKE_CXX_STANDARD 20)
 set(CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_COMPILER "em++") # Use Emscripten C++ compiler
-set(CMAKE_EXECUTABLE_SUFFIX ".wasm")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -sWASM=1 -Wall")
+
+# compiler flags / linker flags
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -sWASM=1") # TODO: add '--no-entry'
 
 if(NOT CMAKE_BUILD_TYPE) # Default to Debug build type
     message("Build Type not set, defaulting to Debug...")
@@ -22,5 +28,4 @@ else()
 endif()
 
 set(sources "src/main.cxx")
-
-add_executable(astron.libwasm ${sources})
+add_executable(libastron ${sources})
