@@ -11,8 +11,15 @@
  * @date 2023-04-25
  */
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten/emscripten.h>
+#else
+#define EMSCRIPTEN_KEEPALIVE
+#endif
+
 #include <iostream>
 
-int main(unsigned int argc, char* argv[]) {
+int main(int argc, char* argv[]) {
+    std::cout << "Hello WASM!\n";
     return 0;
 }
