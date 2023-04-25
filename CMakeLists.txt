@@ -4,16 +4,23 @@ set(name astron.libwasm)
 project(${name})
 include_directories(src)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -fPIC")
+set(CMAKE_CXX_STANDARD 20)
+set(CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_COMPILER "em++") # Use Emscripten C++ compiler
+set(CMAKE_EXECUTABLE_SUFFIX ".wasm")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -sWASM=1 -Wall")
 
-# CMake Build Options
-option(FORCE_COLORED_OUTPUT "Always produce ANSI-colored output (GNU/Clang only)." TRUE)
-
-# Enable GCC/clang ANSI-colored terminal output using Ninja build tool
-if (FORCE_COLORED_OUTPUT)
-    if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-        add_compile_options(-fdiagnostics-color=always)
-    elseif (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-        add_compile_options(-fcolor-diagnostics)
-    endif()
+if(NOT CMAKE_BUILD_TYPE) # Default to Debug build type
+    message("Build Type not set, defaulting to Debug...")
+    set(CMAKE_BUILD_TYPE "Debug")
 endif()
+
+if(CMAKE_BUILD_TYPE EQUAL "Debug")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g3") # Set compiler flags for debugging
+else()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g0 -Oz -flto") # Set optimization compiler flags
+endif()
+
+set(sources "src/main.cxx")
+
+add_executable(astron.libwasm ${sources})
