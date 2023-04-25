@@ -1,23 +1,23 @@
 # IDE local files
 .idea/
 .vscode/
-# Prerequisites
-*.d
+# CMake artifacts
+CMakeFiles/
+*.cmake
+CMakeCache.txt
+Makefile
 # Compiled Object files
+*.wasm
 *.slo
 *.lo
 *.o
 *.obj
-# Precompiled Headers
-*.gch
-*.pch
+# Javascript Glue Code
+*.js
 # Compiled Dynamic libraries
 *.so
 *.dylib
 *.dll
-# Fortran module files
-*.mod
-*.smod
 # Compiled Static libraries
 *.lai
 *.la
