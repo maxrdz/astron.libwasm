@@ -1,0 +1,10 @@
+astron.libwasm
+
+A free and open-source implementation of the Astron networking
+protocol for C++ applications compiled to Web Assembly.
+
+===== Building from source =====
+
+Before compiling the source, you first need to generate the Makefile using CMake.
+To do this, run the following command:
+    `$ e`
