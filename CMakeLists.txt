@@ -27,5 +27,10 @@ else()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g0 -Oz -flto") # Set optimization compiler flags
 endif()
 
-set(sources "src/main.cxx")
-add_executable(libastron ${sources})
+set(dcparser_src src/dcparser/p3dcparser_composite1.cxx
+    src/dcparser/p3dcparser_composite2.cxx
+    src/dcparser/dcLexer.cxx src/dcparser/dcParser.cxx)
+add_executable(dcparser ${dcparser_src})
+
+set(internal src/main.cxx)
+add_executable(libastron ${internal})

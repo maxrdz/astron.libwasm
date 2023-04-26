@@ -1,9 +1,9 @@
-/* A Bison parser, made by GNU Bison 2.4.2.  */
+/* A Bison parser, made by GNU Bison 3.8.2.  */
 
-/* Skeleton interface for Bison's Yacc-like parsers in C
+/* Bison interface for Yacc-like parsers in C
 
-      Copyright (C) 1984, 1989-1990, 2000-2006, 2009-2010 Free Software
-   Foundation, Inc.
+   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2021 Free Software Foundation,
+   Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
    GNU General Public License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+   along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
 /* As a special exception, you may create a larger work that contains
    part or all of the Bison parser skeleton and distribute that work
@@ -31,107 +31,80 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
+/* DO NOT RELY ON FEATURES THAT ARE NOT DOCUMENTED in the manual,
+   especially those whose name start with YY_ or yy_.  They are
+   private implementation details that can be changed or removed.  */
 
-/* Tokens.  */
+#ifndef YY_YY_DCPARSER_HXX_INCLUDED
+# define YY_YY_DCPARSER_HXX_INCLUDED
+/* Debug traces.  */
+#ifndef YYDEBUG
+# define YYDEBUG 0
+#endif
+#if YYDEBUG
+extern int yydebug;
+#endif
+
+/* Token kinds.  */
 #ifndef YYTOKENTYPE
 # define YYTOKENTYPE
-/* Put the tokens into the symbol table, so that GDB and other debuggers
-   know about them.  */
-enum yytokentype
-{
-    UNSIGNED_INTEGER = 258,
-    SIGNED_INTEGER = 259,
-    REAL = 260,
-    STRING = 261,
-    HEX_STRING = 262,
-    IDENTIFIER = 263,
-    KEYWORD = 264,
-    KW_DCLASS = 265,
-    KW_STRUCT = 266,
-    KW_FROM = 267,
-    KW_IMPORT = 268,
-    KW_TYPEDEF = 269,
-    KW_KEYWORD = 270,
-    KW_SWITCH = 271,
-    KW_CASE = 272,
-    KW_DEFAULT = 273,
-    KW_BREAK = 274,
-    KW_INT8 = 275,
-    KW_INT16 = 276,
-    KW_INT32 = 277,
-    KW_INT64 = 278,
-    KW_UINT8 = 279,
-    KW_UINT16 = 280,
-    KW_UINT32 = 281,
-    KW_UINT64 = 282,
-    KW_FLOAT64 = 283,
-    KW_STRING = 284,
-    KW_BLOB = 285,
-    KW_BLOB32 = 286,
-    KW_INT8ARRAY = 287,
-    KW_INT16ARRAY = 288,
-    KW_INT32ARRAY = 289,
-    KW_UINT8ARRAY = 290,
-    KW_UINT16ARRAY = 291,
-    KW_UINT32ARRAY = 292,
-    KW_UINT32UINT8ARRAY = 293,
-    KW_CHAR = 294,
-    START_DC = 295,
-    START_PARAMETER_VALUE = 296,
-    START_PARAMETER_DESCRIPTION = 297
-};
-#endif
-/* Tokens.  */
-#define UNSIGNED_INTEGER 258
-#define SIGNED_INTEGER 259
-#define REAL 260
-#define STRING 261
-#define HEX_STRING 262
-#define IDENTIFIER 263
-#define KEYWORD 264
-#define KW_DCLASS 265
-#define KW_STRUCT 266
-#define KW_FROM 267
-#define KW_IMPORT 268
-#define KW_TYPEDEF 269
-#define KW_KEYWORD 270
-#define KW_SWITCH 271
-#define KW_CASE 272
-#define KW_DEFAULT 273
-#define KW_BREAK 274
-#define KW_INT8 275
-#define KW_INT16 276
-#define KW_INT32 277
-#define KW_INT64 278
-#define KW_UINT8 279
-#define KW_UINT16 280
-#define KW_UINT32 281
-#define KW_UINT64 282
-#define KW_FLOAT64 283
-#define KW_STRING 284
-#define KW_BLOB 285
-#define KW_BLOB32 286
-#define KW_INT8ARRAY 287
-#define KW_INT16ARRAY 288
-#define KW_INT32ARRAY 289
-#define KW_UINT8ARRAY 290
-#define KW_UINT16ARRAY 291
-#define KW_UINT32ARRAY 292
-#define KW_UINT32UINT8ARRAY 293
-#define KW_CHAR 294
-#define START_DC 295
-#define START_PARAMETER_VALUE 296
-#define START_PARAMETER_DESCRIPTION 297
-
-
-
-
-#if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-
-# define yystype YYSTYPE /* obsolescent; will be withdrawn */
-# define YYSTYPE_IS_DECLARED 1
+  enum yytokentype
+  {
+    YYEMPTY = -2,
+    YYEOF = 0,                     /* "end of file"  */
+    YYerror = 256,                 /* error  */
+    YYUNDEF = 257,                 /* "invalid token"  */
+    UNSIGNED_INTEGER = 258,        /* UNSIGNED_INTEGER  */
+    SIGNED_INTEGER = 259,          /* SIGNED_INTEGER  */
+    REAL = 260,                    /* REAL  */
+    STRING = 261,                  /* STRING  */
+    HEX_STRING = 262,              /* HEX_STRING  */
+    IDENTIFIER = 263,              /* IDENTIFIER  */
+    KEYWORD = 264,                 /* KEYWORD  */
+    KW_DCLASS = 265,               /* KW_DCLASS  */
+    KW_STRUCT = 266,               /* KW_STRUCT  */
+    KW_FROM = 267,                 /* KW_FROM  */
+    KW_IMPORT = 268,               /* KW_IMPORT  */
+    KW_TYPEDEF = 269,              /* KW_TYPEDEF  */
+    KW_KEYWORD = 270,              /* KW_KEYWORD  */
+    KW_SWITCH = 271,               /* KW_SWITCH  */
+    KW_CASE = 272,                 /* KW_CASE  */
+    KW_DEFAULT = 273,              /* KW_DEFAULT  */
+    KW_BREAK = 274,                /* KW_BREAK  */
+    KW_INT8 = 275,                 /* KW_INT8  */
+    KW_INT16 = 276,                /* KW_INT16  */
+    KW_INT32 = 277,                /* KW_INT32  */
+    KW_INT64 = 278,                /* KW_INT64  */
+    KW_UINT8 = 279,                /* KW_UINT8  */
+    KW_UINT16 = 280,               /* KW_UINT16  */
+    KW_UINT32 = 281,               /* KW_UINT32  */
+    KW_UINT64 = 282,               /* KW_UINT64  */
+    KW_FLOAT64 = 283,              /* KW_FLOAT64  */
+    KW_STRING = 284,               /* KW_STRING  */
+    KW_BLOB = 285,                 /* KW_BLOB  */
+    KW_BLOB32 = 286,               /* KW_BLOB32  */
+    KW_INT8ARRAY = 287,            /* KW_INT8ARRAY  */
+    KW_INT16ARRAY = 288,           /* KW_INT16ARRAY  */
+    KW_INT32ARRAY = 289,           /* KW_INT32ARRAY  */
+    KW_UINT8ARRAY = 290,           /* KW_UINT8ARRAY  */
+    KW_UINT16ARRAY = 291,          /* KW_UINT16ARRAY  */
+    KW_UINT32ARRAY = 292,          /* KW_UINT32ARRAY  */
+    KW_UINT32UINT8ARRAY = 293,     /* KW_UINT32UINT8ARRAY  */
+    KW_CHAR = 294,                 /* KW_CHAR  */
+    START_DC = 295,                /* START_DC  */
+    START_PARAMETER_VALUE = 296,   /* START_PARAMETER_VALUE  */
+    START_PARAMETER_DESCRIPTION = 297 /* START_PARAMETER_DESCRIPTION  */
+  };
+  typedef enum yytokentype yytoken_kind_t;
 #endif
 
-extern YYSTYPE dcyylval;
+/* Value type.  */
 
 
+extern YYSTYPE yylval;
+
+
+int yyparse (void);
+
+
+#endif /* !YY_YY_DCPARSER_HXX_INCLUDED  */
