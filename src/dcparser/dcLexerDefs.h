@@ -23,10 +23,10 @@ void dc_start_parameter_description();
 int dc_error_count();
 int dc_warning_count();
 
-void dcyyerror(const string &msg);
-void dcyywarning(const string &msg);
+void yyerror(const string &msg);
+void yywarning(const string &msg);
 
-int dcyylex();
+int yylex();
 
 // we always read files
 #define YY_NEVER_INTERACTIVE 1
