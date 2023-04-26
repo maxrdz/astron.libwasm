@@ -7,7 +7,6 @@ CMakeFiles/
 CMakeCache.txt
 Makefile
 # Compiled Object files
-*.wasm
 *.slo
 *.lo
 *.o
@@ -24,6 +23,7 @@ Makefile
 *.a
 *.lib
 # Executables
+*.wasm
 *.exe
 *.out
 *.app
