@@ -84,9 +84,6 @@ is_bogus_class() const {
 ////////////////////////////////////////////////////////////////////
 INLINE void DCClass::
 start_generate() {
-#ifdef WITHIN_PANDA
-  _class_generate_pcollector.start();
-#endif
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -98,7 +95,4 @@ start_generate() {
 ////////////////////////////////////////////////////////////////////
 INLINE void DCClass::
 stop_generate() {
-#ifdef WITHIN_PANDA
-  _class_generate_pcollector.stop();
-#endif
 }
