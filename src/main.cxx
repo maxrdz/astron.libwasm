@@ -19,7 +19,6 @@
 
 #include <iostream>
 
-int main(int argc, char* argv[]) {
+void test_function() {
     std::cout << "Hello WASM!\n";
-    return 0;
 }

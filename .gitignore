@@ -1,6 +1,9 @@
 # IDE local files
 .idea/
 .vscode/
+# Build Directories
+build-debug/
+build-release/
 # CMake artifacts
 CMakeFiles/
 *.cmake
