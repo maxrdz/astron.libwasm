@@ -11,7 +11,7 @@
 #define ASTRON_LIBWASM_NETWORKCLIENT_HXX
 
 #include <boost/asio.hpp>
-#include "../datagram/Datagram.hxx"
+#include "Datagram.hxx"
 
 class NetworkClient {
 protected:

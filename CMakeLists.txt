@@ -71,11 +71,17 @@ else()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g0 -Oz -flto") # Set optimization compiler flags
 endif()
 
-# List base sources
-set(dcparser src/dcparser/p3dcparser_composite1.cxx
-            src/dcparser/p3dcparser_composite2.cxx
-            src/dcparser/dcLexer.cxx src/dcparser/dcParser.cxx)
-set(connection src/connection/NetworkClient.cxx)
-set(base ${dcparser} ${connection})
+### Define core components ###
+set(NETWORK_FILES
+        src/network/NetworkClient.cxx
+)
+set(DCPARSER_FILES
+        src/dcparser/p3dcparser_composite1.cxx
+        src/dcparser/p3dcparser_composite2.cxx
+        src/dcparser/dcLexer.cxx
+        src/dcparser/dcParser.cxx
+)
 
-add_executable(libastron ${base})
+set(sources ${DCPARSER_FILES} ${NETWORK_FILES})
+
+add_executable(libastron ${sources})
