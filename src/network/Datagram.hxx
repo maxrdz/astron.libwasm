@@ -168,6 +168,15 @@ public:
         buf_end += blob.size();
     }
 
+    // add_buffer reserves a buffer of size "length" at the end of the datagram
+    // and returns a pointer to the buffer, so it can be filled manually.
+    uint8_t* add_buffer(dgsize_t length) {
+        check_add_length(length);
+        uint8_t* buf_start = buf + buf_end;
+        buf_end += length;
+        return buf_start;
+    }
+
     void add_server_header(channel_t to, channel_t from, uint16_t message_type) {
         add_uint8(1);
         add_channel(to);

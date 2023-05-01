@@ -87,7 +87,7 @@ set(DCPARSER_FILES
         src/dcparser/dcParser.cxx
 )
 set(NETWORK_FILES
-        src/network/NetworkClient.cxx
+        src/network/Connection.cxx
 )
 set(CORE_FILES
         ${UTIL_FILES} ${DCPARSER_FILES} ${NETWORK_FILES}
