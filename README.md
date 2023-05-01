@@ -7,6 +7,10 @@ astron.libwasm
 
 An open-source implementation of the Astron networking protocol for C++ applications targeting Web Assembly.
 
+This implementation will only be targeting Web Assembly,
+as it is portable to any operating system and any
+architecture that is supported by a WASM runtime.
+
 # Building from Source
 
 Before compiling the source code, you first need to generate the Makefile using CMake.
