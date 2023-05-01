@@ -19,7 +19,7 @@
 
 /* Type definitions */
 #ifdef ASTRON_128BIT_CHANNELS
-#include "util/uint128.h"
+#include "uint128.hxx"
 typedef uint128_t channel_t;
 typedef uint64_t doid_t;
 typedef uint64_t zone_t;

@@ -14,7 +14,7 @@
 #ifndef ASTRON_LIBWASM_MSGTYPES_HXX
 #define ASTRON_LIBWASM_MSGTYPES_HXX
 
-#include "../types.hxx"
+#include "../util/types.hxx"
 
 /* Message boolean macros */
 #define SUCCESS 1
