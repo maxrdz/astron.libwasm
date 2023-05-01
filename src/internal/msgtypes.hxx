@@ -5,6 +5,10 @@
  * All use of this software is subject to the terms of the revised BSD
  * license. You should have received a copy of this license along
  * with this source code in a file named "COPYING".
+ *
+ * @file msgtypes.hxx
+ * @author Astron Contributors
+ * @date 2023-04-30
  */
 
 #ifndef ASTRON_LIBWASM_MSGTYPES_HXX

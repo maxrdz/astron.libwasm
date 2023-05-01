@@ -72,16 +72,20 @@ else()
 endif()
 
 ### Define core components ###
-set(NETWORK_FILES
-        src/network/NetworkClient.cxx
+set(UTIL_FILES
+        src/util/Logger.cxx
 )
 set(DCPARSER_FILES
-        src/dcparser/p3dcparser_composite1.cxx
-        src/dcparser/p3dcparser_composite2.cxx
+        src/dcparser/dcparser_composite1.cxx
+        src/dcparser/dcparser_composite2.cxx
         src/dcparser/dcLexer.cxx
         src/dcparser/dcParser.cxx
 )
-
-set(sources ${DCPARSER_FILES} ${NETWORK_FILES})
-
+set(NETWORK_FILES
+        src/network/NetworkClient.cxx
+)
+set(CORE_FILES
+        ${UTIL_FILES} ${DCPARSER_FILES} ${NETWORK_FILES}
+)
+set(sources ${CORE_FILES})
 add_executable(libastron ${sources})
