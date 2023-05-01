@@ -13,7 +13,6 @@
 
 #include "Connection.hxx"
 #include <list>
-#include <string>
 #include <boost/bind.hpp>
 
 namespace astron { // open namespace
