@@ -35,7 +35,10 @@ option(USE_BOOST "Passes `-sUSE_BOOST_HEADERS=1` to the compiler & linker. Curre
 option(WASM64 "Passes `-sMEMORY64=1` to the compiler & linker. This is experimental! Default: false." false)
 
 # Use 32-bit datagram length tags
-option(USE_32BIT_DATAGRAMS "If on, datagrams and dclass fields will use 32-bit length tags instead of 16-bit." false)
+option(USE_32BIT_DATAGRAMS "Datagrams and dclass fields will use 32-bit length tags instead of 16-bit." false)
+
+# Use 128-bit channel IDs over the wire
+option(USE_128BIT_CHANNELS "Compile with support for 128-bit channel IDs. Experimental." false)
 
 if(USE_BOOST)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -sUSE_BOOST_HEADERS=1")
@@ -47,8 +50,10 @@ if(WASM64)
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -sMEMORY64=1")
 endif()
 if(USE_32BIT_DATAGRAMS)
-    add_definitions(-DASTRON_32BIT_DATAGRAMS)
-    add_definitions(-DDCPARSER_32BIT_LENGTH_TAG)
+    add_definitions(-DASTRON_32BIT_DATAGRAMS -DDCPARSER_32BIT_LENGTH_TAG)
+endif()
+if(USE_128BIT_CHANNELS)
+    add_definitions(-DASTRON_128BIT_CHANNELS)
 endif()
 
 # ==================================================
