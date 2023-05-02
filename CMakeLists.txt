@@ -11,6 +11,15 @@ if (WIN32) # Windows needs an extra define
     add_definitions(-D_WIN32_WINDOWS)
 endif()
 
+if(${CMAKE_SYSTEM_NAME} MATCHES "Linux") # Linux requires pthreads
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+endif()
+
+if(NOT CMAKE_BUILD_TYPE) # Default to Debug
+    message("Build Type not set. Defaulting to Debug...")
+    set(CMAKE_BUILD_TYPE "Debug")
+endif()
+
 set(CMAKE_CXX_STANDARD 11) # We need gnu+11 to compile with Boost.
 set(CXX_STANDARD_REQUIRED ON)
 if (DEFINED EMSCRIPTEN)
@@ -18,11 +27,18 @@ if (DEFINED EMSCRIPTEN)
     set(CMAKE_EXECUTABLE_SUFFIX ".wasm")
 endif()
 
-# Default compiler / linker flags
+# ======================================
+# ========== Compiler Flags ============
+# ======================================
+
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -sWASM=1 -sSTANDALONE_WASM=1 --no-entry")
 # Ignore 'unused_xxx' warnings
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function")
+
+# Debug & Release compiler flags
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -g3")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -g0 -Oz -flto")
 
 # ======================================
 # =========== CMake Options ============
@@ -54,26 +70,6 @@ if(USE_32BIT_DATAGRAMS)
 endif()
 if(USE_128BIT_CHANNELS)
     add_definitions(-DASTRON_128BIT_CHANNELS)
-endif()
-
-# ==================================================
-# ======== Dynamic Compiler & Linker Flags =========
-# ==================================================
-
-# Linux requires pthreads
-if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
-endif()
-
-if(NOT CMAKE_BUILD_TYPE)
-    message("Build Type not set. Defaulting to Debug...")
-    set(CMAKE_BUILD_TYPE "Debug")
-endif()
-
-if(CMAKE_BUILD_TYPE EQUAL "Debug")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g3") # Set compiler flags for debugging
-else()
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g0 -Oz -flto") # Set optimization compiler flags
 endif()
 
 ### Define core components ###
