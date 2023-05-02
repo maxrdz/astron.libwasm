@@ -29,6 +29,8 @@ and added to your PATH in order to use the tools from the emsdk.
 
 # Contributing
 
+Before writing your first contribution, please make sure to read the [contributing guidelines](CONTRIBUTING.md).
+
 Note for contributors: To regenerate the parser / lexer in `src/dcparser`,
 please use the following commands inside the `src/dcparser` directory:
 
