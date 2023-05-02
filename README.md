@@ -36,3 +36,7 @@ please use the following commands inside the `src/dcparser` directory:
 $ bison dcParser.yxx -o dcParser.cxx --header
 $ flex --outfile dcLexer.cxx dcLexer.lxx
 ```
+
+# Reporting Vulnerabilities
+
+Please read the [security policy](SECURITY.md) document for more information on reporting software vulnerabilities.
