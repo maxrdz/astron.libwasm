@@ -89,4 +89,4 @@ set(CORE_FILES
         ${UTIL_FILES} ${DCPARSER_FILES} ${NETWORK_FILES}
 )
 set(sources ${CORE_FILES})
-add_executable(libastron ${sources})
+add_library(astron STATIC ${sources})
