@@ -123,9 +123,9 @@ public:
     // This is also useful to read the whole datagram, because the beginning of the datagram
     // looks exactly the same as a nested datagram.
     std::vector<uint8_t> read_datagram() {
-        check_read_length(DGSIZE_SIZE_BYTES);
+        check_read_length(DG_SIZE_TAG_BYTES);
         dgsize_t length = *(dgsize_t*)(m_dg.get_data() + m_offset);
-        m_offset += DGSIZE_SIZE_BYTES;
+        m_offset += DG_SIZE_TAG_BYTES;
 
         return read_data(length);
     }

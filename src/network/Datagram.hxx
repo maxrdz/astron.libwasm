@@ -135,7 +135,7 @@ public:
     }
 
     void add_data(const std::vector<uint8_t> &data) {
-        if(data.size()) {
+        if (data.size()) {
             check_add_length(data.size());
             memcpy(buf + buf_end, &data[0], data.size());
             buf_end += data.size();
@@ -168,6 +168,13 @@ public:
         buf_end += blob.size();
     }
 
+    void add_blob(const Datagram &dg) {
+        add_size(dg.buf_end);
+        check_add_length(dg.buf_end);
+        memcpy(buf + buf_end, dg.buf, dg.buf_end);
+        this->buf_end += dg.buf_end;
+    }
+
     // add_buffer reserves a buffer of size "length" at the end of the datagram
     // and returns a pointer to the buffer, so it can be filled manually.
     uint8_t* add_buffer(dgsize_t length) {
@@ -175,6 +182,15 @@ public:
         uint8_t* buf_start = buf + buf_end;
         buf_end += length;
         return buf_start;
+    }
+
+    // add_size adds a datagram or field length-tag to the datagram.
+    // Note: this method should always be used instead of add_uint16 when adding a length tag
+    //       to allow for future support of larger or small length limits.
+    void add_size(const dgsize_t &v) {
+        check_add_length(sizeof(dgsize_t));
+        memcpy(buf + buf_end, &v, sizeof(dgsize_t));
+        buf_end += sizeof(dgsize_t);
     }
 
     void add_server_header(channel_t to, channel_t from, uint16_t message_type) {

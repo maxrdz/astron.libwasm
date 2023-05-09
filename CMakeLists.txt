@@ -72,7 +72,7 @@ if(USE_128BIT_CHANNELS)
     add_definitions(-DASTRON_128BIT_CHANNELS)
 endif()
 
-### Define core components ###
+######### Define Core Components ########
 set(UTIL_FILES
         src/util/Logger.cxx
 )
@@ -85,8 +85,12 @@ set(DCPARSER_FILES
 set(NETWORK_FILES
         src/network/Connection.cxx
 )
+######### Internal Protocol Components #########
+set(INTERNAL_FILES
+        src/internal/InternalConnection.cxx
+)
 set(CORE_FILES
         ${UTIL_FILES} ${DCPARSER_FILES} ${NETWORK_FILES}
 )
-set(sources ${CORE_FILES})
-add_library(astron STATIC ${sources})
+set(internal_build ${CORE_FILES} ${INTERNAL_FILES})
+add_library(astron STATIC ${internal_build})
