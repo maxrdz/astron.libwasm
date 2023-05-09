@@ -37,6 +37,7 @@ namespace astron { // open namespace
     }
 
     void InternalConnection::handle_datagram(const Datagram &dg, DatagramIterator &dgi) {
+        // overwrite method
     }
 
     // ------------- Control Messages ------------- //

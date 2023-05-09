@@ -38,7 +38,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-parameter -Wno-unused-variab
 
 # Debug & Release compiler flags
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -g3")
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -g0 -Oz -flto")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -g0 -Oz")
 
 # ======================================
 # =========== CMake Options ============
@@ -94,3 +94,6 @@ set(CORE_FILES
 )
 set(internal_build ${CORE_FILES} ${INTERNAL_FILES})
 add_library(astron STATIC ${internal_build})
+
+######### Example WASM Binaries #########
+add_subdirectory(example)
