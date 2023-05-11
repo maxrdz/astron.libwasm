@@ -11,6 +11,12 @@
  * @date 2023-04-30
  */
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#else
+#define EMSCRIPTEN_KEEPALIVE
+#endif
+
 #include <time.h>
 #include <iostream>
 #include <fstream>
@@ -180,10 +186,14 @@ LoggerBuf::LoggerBuf(const std::string &file_name, bool output_to_console) :
 
 int LoggerBuf::overflow(int c)
 {
-    if(m_output_to_console) {
+    if (m_output_to_console) {
+#ifdef __EMSCRIPTEN__
+        emscripten_log(EM_LOG_CONSOLE, std::to_string(c).c_str());
+#else
         std::cout.put(c);
+#endif
     }
-    if(m_has_file) {
+    if (m_has_file) {
         m_file.put(c);
     }
     return c;
@@ -191,10 +201,14 @@ int LoggerBuf::overflow(int c)
 
 std::streamsize LoggerBuf::xsputn(const char* s, std::streamsize n)
 {
-    if(m_output_to_console) {
+    if (m_output_to_console) {
+#ifdef __EMSCRIPTEN__
+        emscripten_log(EM_LOG_CONSOLE, s);
+#else
         std::cout.write(s, n);
+#endif
     }
-    if(m_has_file) {
+    if (m_has_file) {
         m_file.write(s, n);
     }
     return n;
