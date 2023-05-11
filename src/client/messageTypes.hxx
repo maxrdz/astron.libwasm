@@ -1,0 +1,56 @@
+/*
+ * Copyright (c) 2014, kestred. All rights reserved.
+ * Copyright (c) 2023, Max Rodriguez. All rights reserved.
+ *
+ * All use of this software is subject to the terms of the revised BSD
+ * license. You should have received a copy of this license along
+ * with this source code in a file named "COPYING".
+ *
+ * @file messageTypes.hxx
+ * @author kestred, Max Rodriguez
+ * @date 2023-05-11
+ */
+
+#ifndef ASTRON_LIBWASM_MESSAGETYPES_HXX
+#define ASTRON_LIBWASM_MESSAGETYPES_HXX
+
+#include "../util/types.hxx"
+
+/* Message boolean macros */
+#define SUCCESS 1
+#define FAILURE 0
+
+/* Message type definitions */
+enum ClientMessageTypes {
+    CLIENT_HELLO = 1,
+    CLIENT_HELLO_RESP = 2,
+    CLIENT_DISCONNECT = 3,
+    CLIENT_EJECT = 4,
+    CLIENT_HEARTBEAT = 5,
+    CLIENT_OBJECT_SET_FIELD = 120,
+    CLIENT_OBJECT_LEAVING = 132,
+    CLIENT_OBJECT_LEAVING_OWNER = 161,
+    CLIENT_ENTER_OBJECT_REQUIRED = 142,
+    CLIENT_ENTER_OBJECT_REQUIRED_OTHER = 143,
+    CLIENT_ENTER_OBJECT_REQUIRED_OWNER = 172,
+    CLIENT_ENTER_OBJECT_REQUIRED_OTHER_OWNER = 173,
+    CLIENT_DONE_INTEREST_RESP = 204,
+    CLIENT_ADD_INTEREST = 200,
+    CLIENT_ADD_INTEREST_MULTIPLE = 201,
+    CLIENT_REMOVE_INTEREST = 203,
+    CLIENT_OBJECT_LOCATION = 140,
+
+    CLIENT_DISCONNECT_GENERIC = 1,
+    CLIENT_DISCONNECT_OVERSIZED_DATAGRAM = 106,
+    CLIENT_DISCONNECT_NO_HELLO = 107,
+    CLIENT_DISCONNECT_INVALID_MSGTYPE = 108,
+    CLIENT_DISCONNECT_TRUNCATED_DATAGRAM = 109,
+    CLIENT_DISCONNECT_ANONYMOUS_VIOLATION = 113,
+    CLIENT_DISCONNECT_MISSING_OBJECT = 117,
+    CLIENT_DISCONNECT_FORBIDDEN_FIELD = 118,
+    CLIENT_DISCONNECT_FORBIDDEN_RELOCATE = 119,
+    CLIENT_DISCONNECT_BAD_VERSION = 124,
+    CLIENT_DISCONNECT_BAD_DCHASH = 125,
+};
+
+#endif //ASTRON_LIBWASM_MESSAGETYPES_HXX

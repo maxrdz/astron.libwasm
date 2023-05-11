@@ -40,7 +40,7 @@ enum MsgtypeRanges {
 };
 
 /* Message type definitions */
-enum MessageTypes {
+enum InternalMessageTypes {
     // Reserved
     RESERVED_MSG_TYPE = 0,
 

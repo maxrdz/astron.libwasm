@@ -10,6 +10,12 @@
  * @date 2023-04-30
  */
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#else
+#define EMSCRIPTEN_KEEPALIVE
+#endif
+
 #include "../src/internal/InternalConnection.hxx"
 using namespace astron;
 

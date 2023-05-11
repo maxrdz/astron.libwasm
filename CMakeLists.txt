@@ -22,17 +22,13 @@ endif()
 
 set(CMAKE_CXX_STANDARD 11) # We need gnu+11 to compile with Boost.
 set(CXX_STANDARD_REQUIRED ON)
-if (DEFINED EMSCRIPTEN)
-    set(CMAKE_CXX_COMPILER "em++") # Use Emscripten C++ compiler
-    set(CMAKE_EXECUTABLE_SUFFIX ".wasm")
-endif()
 
-# ======================================
-# ========== Compiler Flags ============
-# ======================================
+# ===============================================
+# ========== Compiler / Linker Flags ============
+# ===============================================
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -sWASM=1 -sSTANDALONE_WASM=1 --no-entry")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -sWASM=1 -sASYNCIFY --no-entry")
 # Ignore 'unused_xxx' warnings
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function")
 
@@ -85,15 +81,22 @@ set(DCPARSER_FILES
 set(NETWORK_FILES
         src/network/Connection.cxx
 )
-######### Internal Protocol Components #########
-set(INTERNAL_FILES
-        src/internal/InternalConnection.cxx
-)
 set(CORE_FILES
         ${UTIL_FILES} ${DCPARSER_FILES} ${NETWORK_FILES}
 )
+
+######### Client / Internal Components #########
+set(CLIENT_FILES
+        src/client/ClientConnection.cxx
+)
+set(INTERNAL_FILES
+        src/internal/InternalConnection.cxx
+)
+set(client_build ${CORE_FILES} ${CLIENT_FILES})
 set(internal_build ${CORE_FILES} ${INTERNAL_FILES})
-add_library(astron STATIC ${internal_build})
+
+add_library(astron-client STATIC ${client_build})
+add_library(astron-internal STATIC ${internal_build})
 
 ######### Example WASM Binaries #########
 add_subdirectory(example)

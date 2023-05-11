@@ -13,7 +13,7 @@
  */
 
 #include "InternalConnection.hxx"
-#include "msgtypes.hxx"
+#include "messageTypes.hxx"
 
 namespace astron { // open namespace
 

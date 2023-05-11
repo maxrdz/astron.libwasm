@@ -11,6 +11,12 @@
  * @date 2023-04-30
  */
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#else
+#define EMSCRIPTEN_KEEPALIVE
+#endif
+
 #include "Connection.hxx"
 #include <list>
 #include <boost/bind.hpp>
