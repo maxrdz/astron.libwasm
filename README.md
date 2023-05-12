@@ -5,11 +5,11 @@ astron.libwasm
 
 ![](https://img.shields.io/discord/1066973060357443644?color=blue&label=Discord&logo=discord&logoColor=white) ![](https://img.shields.io/github/last-commit/Max-Rodriguez/astron.libwasm) ![](https://img.shields.io/github/license/Max-Rodriguez/astron.libwasm)
 
-An open-source implementation of the Astron networking protocol for C++ applications targeting Web Assembly.
+An open-source implementation of the Astron client  protocol for C++ applications targeting Web Assembly.
 
 This implementation will only be targeting Web Assembly,
 as it is portable to any operating system and any
-architecture that is supported by a WASM runtime.
+architecture that is supported by a Javascript engine. (Chrome v8, NodeJS)
 
 # Building from Source
 

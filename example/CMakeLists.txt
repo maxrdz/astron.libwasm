@@ -7,8 +7,5 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -g3")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -g0 -Oz")
 
 ######### Example WASM Binaries #########
-set(INTERNAL_EXAMPLE_SOURCE
-        internal-example.cxx
-)
-add_executable(internal_example ${INTERNAL_EXAMPLE_SOURCE})
-target_link_libraries(internal_example PUBLIC astron-internal)
+add_executable(example example.cxx)
+target_link_libraries(example PUBLIC astron)

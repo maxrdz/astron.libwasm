@@ -28,7 +28,7 @@ set(CXX_STANDARD_REQUIRED ON)
 # ===============================================
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -sWASM=1 -sASYNCIFY --no-entry")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lwebsocket.js -sWASM=1 -sASYNCIFY --no-entry")
 # Ignore 'unused_xxx' warnings
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function")
 
@@ -68,35 +68,17 @@ if(USE_128BIT_CHANNELS)
     add_definitions(-DASTRON_128BIT_CHANNELS)
 endif()
 
-######### Define Core Components ########
-set(UTIL_FILES
+######### Define Components ########
+set(SOURCE_FILES
         src/util/Logger.cxx
-)
-set(DCPARSER_FILES
-        src/dcparser/dcparser_composite1.cxx
-        src/dcparser/dcparser_composite2.cxx
-        src/dcparser/dcLexer.cxx
-        src/dcparser/dcParser.cxx
-)
-set(NETWORK_FILES
+        src/dcfile/dcparser_composite1.cxx
+        src/dcfile/dcparser_composite2.cxx
+        src/dcfile/dcLexer.cxx
+        src/dcfile/dcParser.cxx
         src/network/Connection.cxx
-)
-set(CORE_FILES
-        ${UTIL_FILES} ${DCPARSER_FILES} ${NETWORK_FILES}
-)
-
-######### Client / Internal Components #########
-set(CLIENT_FILES
         src/client/ClientConnection.cxx
 )
-set(INTERNAL_FILES
-        src/internal/InternalConnection.cxx
-)
-set(client_build ${CORE_FILES} ${CLIENT_FILES})
-set(internal_build ${CORE_FILES} ${INTERNAL_FILES})
-
-add_library(astron-client STATIC ${client_build})
-add_library(astron-internal STATIC ${internal_build})
+add_library(astron STATIC ${SOURCE_FILES})
 
 ######### Example WASM Binaries #########
 add_subdirectory(example)

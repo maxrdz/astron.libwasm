@@ -18,7 +18,7 @@
 #include <string>
 #include <vector>
 #include <string.h> // memcpy
-#include "../internal/messageTypes.hxx"
+#include "../util/types.hxx"
 
 #define DG_SIZE_TAG_BYTES 2
 typedef uint16_t dgsize_t;
