@@ -11,6 +11,8 @@ This implementation will only be targeting Web Assembly,
 as it is portable to any operating system and any
 architecture that is supported by a Javascript engine. (Chrome v8, NodeJS)
 
+For the internal (server-side) implementation of Astron, check out [astron.libts](https://github.com/Max-Rodriguez/astron.libts).
+
 # Building from Source
 
 Before compiling the source code, you first need to generate the Makefile using CMake.
