@@ -12,7 +12,7 @@
  */
 
 #ifdef __EMSCRIPTEN__
-#include <emscripten.h>
+#include <emscripten/emscripten.h>
 #else
 #define EMSCRIPTEN_KEEPALIVE
 #endif
@@ -25,18 +25,29 @@
 NullStream null_stream; // used to print nothing by compiling out the unwanted messages
 NullBuffer null_buffer; // used to print nothing by ignoring the unwanted messages
 
+#ifndef __EMSCRIPTEN__
 Logger::Logger(const std::string &log_file, LogSeverity sev, bool console_output) :
-        m_buf(log_file, console_output), m_severity(sev), m_output(&m_buf)
-{
+        m_buf(log_file, console_output), m_severity(sev), m_output(&m_buf) {
 }
+#else
+Logger::Logger(const std::string &log_file, LogSeverity sev, bool console_output) :
+        m_buf(log_file, console_output), m_severity(sev) {
+}
+#endif
 
 #ifdef ASTRON_DEBUG_MESSAGES
-Logger::Logger() : m_buf(), m_severity(LSEVERITY_DEBUG), m_output(&m_buf), m_color_enabled(true)
+#ifndef __EMSCRIPTEN__
+Logger::Logger() : m_buf(), m_severity(LSEVERITY_DEBUG), m_output(&m_buf), m_color_enabled(true) { }
 #else
-Logger::Logger() : m_buf(), m_severity(LSEVERITY_INFO), m_output(&m_buf), m_color_enabled(true)
-#endif
-{
-}
+Logger::Logger() : m_buf(), m_severity(LSEVERITY_DEBUG), m_color_enabled(true) { }
+#endif // __EMSCRIPTEN__
+#else
+#ifndef __EMSCRIPTEN__
+Logger::Logger() : m_buf(), m_severity(LSEVERITY_INFO), m_output(&m_buf), m_color_enabled(true) { }
+#else
+Logger::Logger() : m_buf(), m_severity(LSEVERITY_INFO), m_color_enabled(true) { }
+#endif // __EMSCRIPTEN__
+#endif // ASTRON_DEBUG_MESSAGES
 
 /* Reset code */
 static const char* ANSI_RESET = "\x1b[0m";
@@ -143,7 +154,6 @@ LockedLogOutput Logger::log(LogSeverity sev)
             << ": ";
     }
 
-
     return out;
 }
 
@@ -188,10 +198,10 @@ int LoggerBuf::overflow(int c)
 {
     if (m_output_to_console) {
 #ifdef __EMSCRIPTEN__
-        emscripten_log(EM_LOG_CONSOLE, std::to_string(c).c_str());
+        m_output.append(std::to_string(c).c_str());
 #else
         std::cout.put(c);
-#endif
+#endif // __EMSCRIPTEN__
     }
     if (m_has_file) {
         m_file.put(c);
@@ -203,16 +213,23 @@ std::streamsize LoggerBuf::xsputn(const char* s, std::streamsize n)
 {
     if (m_output_to_console) {
 #ifdef __EMSCRIPTEN__
-        emscripten_log(EM_LOG_CONSOLE, s);
+        m_output.append(s);
 #else
         std::cout.write(s, n);
-#endif
+#endif // __EMSCRIPTEN__
     }
     if (m_has_file) {
         m_file.write(s, n);
     }
     return n;
 }
+
+#ifdef __EMSCRIPTEN__
+void Logger::js_console_log() {
+    emscripten_log(EM_LOG_CONSOLE, m_output.c_str());
+    m_output.clear();
+}
+#endif // __EMSCRIPTEN__
 
 // In the Astron daemon source, this is defined in `src/global.cpp`.
 std::unique_ptr<Logger> g_logger(new Logger);

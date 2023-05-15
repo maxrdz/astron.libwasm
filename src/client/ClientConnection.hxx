@@ -14,6 +14,7 @@
 #ifndef ASTRON_LIBWASM_CLIENTCONNECTION_HXX
 #define ASTRON_LIBWASM_CLIENTCONNECTION_HXX
 
+#include "../util/Logger.hxx"
 #include "../network/Connection.hxx"
 
 namespace astron { // open namespace
@@ -25,6 +26,11 @@ namespace astron { // open namespace
     public:
         ClientConnection();
 
+        // logger returns the ClientConnection log category.
+        inline LogCategory& logger() {
+            return m_log;
+        }
+
         // connect starts a connection to the server, negotiates Hello and starts sending
         // heartbeats periodically. It returns after negotiation is complete.
         void connect(std::string uri, uint32_t dc_hash, std::string version);
@@ -32,6 +38,9 @@ namespace astron { // open namespace
         // disconnect cleanly closes the connection.
         // Internally: Sends a CLIENT_DISCONNECT, and waits for connection to close.
         void disconnect();
+
+    protected:
+        LogCategory m_log;
     };
 } // close namespace
 
