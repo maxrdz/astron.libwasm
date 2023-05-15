@@ -213,3 +213,6 @@ std::streamsize LoggerBuf::xsputn(const char* s, std::streamsize n)
     }
     return n;
 }
+
+// In the Astron daemon source, this is defined in `src/global.cpp`.
+std::unique_ptr<Logger> g_logger(new Logger);
