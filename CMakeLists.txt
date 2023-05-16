@@ -8,7 +8,7 @@ if (NOT EMSCRIPTEN)
 endif()
 
 if (WIN32) # Windows needs an extra define
-    add_definitions(-D_WIN32_WINDOWS)
+    add_compile_definitions(_WIN32_WINDOWS)
 endif()
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux") # Linux requires pthreads
@@ -17,7 +17,7 @@ endif()
 
 if(NOT CMAKE_BUILD_TYPE) # Default to Debug
     message("Build Type not set. Defaulting to Debug...")
-    set(CMAKE_BUILD_TYPE "Debug")
+    set(CMAKE_BUILD_TYPE Debug)
 endif()
 
 set(CMAKE_CXX_STANDARD 11) # We need gnu+11 to compile with Boost.
@@ -34,9 +34,10 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-parameter -Wno-unused-variab
 
 # Debug & Release compiler flags
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -gsource-map") # -g4 deprecated
-if(CMAKE_BUILD_TYPE EQUAL "Debug")
+if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
     set(ENV{EMCC_DEBUG} 1) # enable emcc debugging
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -s ASSERTIONS=2 -s SAFE_HEAP=1 -s STACK_OVERFLOW_CHECK=1")
+    add_compile_definitions(ASTRON_DEBUG_MESSAGES) # enable astron logger debug output
 endif()
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -g0 -Oz")
 
@@ -59,17 +60,17 @@ option(USE_128BIT_CHANNELS "Compile with support for 128-bit channel IDs. Experi
 if(USE_BOOST)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -sUSE_BOOST_HEADERS=1")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -sUSE_BOOST_HEADERS=1")
-    add_definitions(-DBOOST_ASIO_HAS_PTHREADS) # Fixes "Only Windows and POSIX are supported!" error.
+    add_compile_definitions(BOOST_ASIO_HAS_PTHREADS) # Fixes "Only Windows and POSIX are supported!" error.
 endif()
 if(WASM64)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -sMEMORY64=1")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -sMEMORY64=1")
 endif()
 if(USE_32BIT_DATAGRAMS)
-    add_definitions(-DASTRON_32BIT_DATAGRAMS -DDCPARSER_32BIT_LENGTH_TAG)
+    add_compile_definitions(ASTRON_32BIT_DATAGRAMS DCPARSER_32BIT_LENGTH_TAG)
 endif()
 if(USE_128BIT_CHANNELS)
-    add_definitions(-DASTRON_128BIT_CHANNELS)
+    add_compile_definitions(ASTRON_128BIT_CHANNELS)
 endif()
 
 ######### Define Components ########
