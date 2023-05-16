@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.22 FATAL_ERROR)
 set(name astron.libwasm)
 project(${name})
 include_directories(src)
+set(CMAKE_EXECUTABLE_SUFFIX ".html") # Output HTML wrapper to launch WASM binary
 
 if (NOT EMSCRIPTEN)
     return() # Currently only building with Emscripten
@@ -36,7 +37,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-parameter -Wno-unused-variab
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -gsource-map") # -g4 deprecated
 if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
     set(ENV{EMCC_DEBUG} 1) # enable emcc debugging
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -s ASSERTIONS=2 -s SAFE_HEAP=1 -s STACK_OVERFLOW_CHECK=1")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -sASSERTIONS=2 -sSAFE_HEAP=1 -sSTACK_OVERFLOW_CHECK=1 --emrun")
     add_compile_definitions(ASTRON_DEBUG_MESSAGES) # enable astron logger debug output
 endif()
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -g0 -Oz")
