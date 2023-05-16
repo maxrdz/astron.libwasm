@@ -23,22 +23,13 @@
 namespace astron { // open namespace
 
     ClientConnection::ClientConnection() : m_log("msgdir", "Client Connection") {
-        logger().info() << "Initialized Client Connection.";
-        g_logger->js_flush();
-        /*
-         * We have to explicitly call the `js_flush()` method to make the `emscripten_log()` call.
-         * Let me explain:
-         *      The original Astron logger makes continuous writes to the `std::cout` stream as it
-         *      forms the log output. Targeting Web Assembly with Emscripten, `std::cout` isn't printed
-         *      to the Javascript console unless we call `emscripten_log()` via the Emscripten API ("emscripten.h").
-         *
-         *      The astron.libwasm implementation uses a modified Logger module that, instead of writing directly
-         *      to the `std::cout` stream, it writes into a `std::string` buffer. Then, once `js_flush()` is
-         *      called, `emscripten_log()` is called (passing the string buffer) and clears the string buffer.
-         */
     }
 
     void ClientConnection::connect(std::string uri, uint32_t dc_hash, std::string version) {
+        logger().info() << "Connecting to Client Agent at '" << uri << "' with version '" << version << "'";
+        g_logger->js_flush();
+        logger().debug() << "Client DC Hash: 0x" << std::to_string(dc_hash);
+        g_logger->js_flush();
     }
 
     void ClientConnection::disconnect() {

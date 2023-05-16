@@ -225,7 +225,18 @@ std::streamsize LoggerBuf::xsputn(const char* s, std::streamsize n)
 }
 
 #ifdef __EMSCRIPTEN__
+/*
+ * We have to explicitly call the `js_flush()` method to make the `emscripten_log()` call.
+ * The original Astron logger makes continuous writes to the `std::cout` stream as it
+ * forms the log output. Targeting Web Assembly with Emscripten, `std::cout` isn't printed
+ * to the Javascript console unless we call `emscripten_log()` via the Emscripten API ("emscripten.h").
+ *
+ * The astron.libwasm implementation uses a modified Logger module that, instead of writing directly
+ * to the `std::cout` stream, it writes into a `std::string` buffer. Then, once `js_flush()` is
+ * called, `emscripten_log()` is called (passing the string buffer) and clears the string buffer.
+ */
 void Logger::js_flush() {
+    if (m_output.empty()) return;
     emscripten_log(EM_LOG_CONSOLE, m_output.c_str());
     m_output.clear();
 }
