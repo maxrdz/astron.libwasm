@@ -225,7 +225,7 @@ std::streamsize LoggerBuf::xsputn(const char* s, std::streamsize n)
 }
 
 #ifdef __EMSCRIPTEN__
-void Logger::js_console_log() {
+void Logger::js_flush() {
     emscripten_log(EM_LOG_CONSOLE, m_output.c_str());
     m_output.clear();
 }

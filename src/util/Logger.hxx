@@ -192,7 +192,7 @@ public:
     LogSeverity get_min_severity();
 
 #ifdef __EMSCRIPTEN__
-    void js_console_log();
+    void js_flush();
 #endif // __EMSCRIPTEN__
 
 private:
