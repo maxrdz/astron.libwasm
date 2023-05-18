@@ -28,8 +28,8 @@ set(CXX_STANDARD_REQUIRED ON)
 # ========== Compiler / Linker Flags ============
 # ===============================================
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lwebsocket.js -sWASM=1 -sASYNCIFY --no-entry")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -fsanitize=undefined")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=undefined -lwebsocket.js -sWASM=1 -sASYNCIFY --no-entry")
 # Ignore 'unused_xxx' warnings
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function")
 
@@ -37,7 +37,10 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-parameter -Wno-unused-variab
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -gsource-map") # -g4 deprecated
 if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
     set(ENV{EMCC_DEBUG} 1) # enable emcc debugging
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -sASSERTIONS=2 -sSAFE_HEAP=1 -sSTACK_OVERFLOW_CHECK=1 --emrun")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -sASSERTIONS=2 -sSTACK_OVERFLOW_CHECK=1 --emrun")
+    # Compile & link with Clang's undefined behavior sanitized (UBSan)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=undefined -sSAFE_HEAP=1")
     add_compile_definitions(ASTRON_DEBUG_MESSAGES) # enable astron logger debug output
 endif()
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -g0 -Oz")
