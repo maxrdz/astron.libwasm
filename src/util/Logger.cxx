@@ -25,28 +25,14 @@
 NullStream null_stream; // used to print nothing by compiling out the unwanted messages
 NullBuffer null_buffer; // used to print nothing by ignoring the unwanted messages
 
-#ifndef __EMSCRIPTEN__
 Logger::Logger(const std::string &log_file, LogSeverity sev, bool console_output) :
-        m_buf(log_file, console_output), m_severity(sev), m_output(&m_buf) {
+        m_buf(&m_buffer, log_file, console_output), m_severity(sev), m_output(&m_buf) {
 }
-#else
-Logger::Logger(const std::string &log_file, LogSeverity sev, bool console_output) :
-        m_buf(log_file, console_output), m_severity(sev) {
-}
-#endif
 
 #ifdef ASTRON_DEBUG_MESSAGES
-#ifndef __EMSCRIPTEN__
-Logger::Logger() : m_buf(), m_severity(LSEVERITY_DEBUG), m_output(&m_buf), m_color_enabled(true) { }
+Logger::Logger() : m_buf(&m_buffer), m_severity(LSEVERITY_DEBUG), m_output(&m_buf), m_color_enabled(true) { }
 #else
-Logger::Logger() : m_buf(), m_severity(LSEVERITY_DEBUG), m_color_enabled(true) { }
-#endif // __EMSCRIPTEN__
-#else
-#ifndef __EMSCRIPTEN__
-Logger::Logger() : m_buf(), m_severity(LSEVERITY_INFO), m_output(&m_buf), m_color_enabled(true) { }
-#else
-Logger::Logger() : m_buf(), m_severity(LSEVERITY_INFO), m_color_enabled(true) { }
-#endif // __EMSCRIPTEN__
+Logger::Logger() : m_buf(&m_buffer), m_severity(LSEVERITY_INFO), m_output(&m_buf), m_color_enabled(true) { }
 #endif // ASTRON_DEBUG_MESSAGES
 
 /* Reset code */
@@ -177,17 +163,22 @@ LogSeverity Logger::get_min_severity()
     return m_severity;
 }
 
-LoggerBuf::LoggerBuf() : std::streambuf(), m_has_file(false), m_output_to_console(true)
+LoggerBuf::LoggerBuf(std::string *buffer) :
+        std::streambuf(), m_buffer(buffer), m_has_file(false), m_output_to_console(true)
 {
+#ifndef __EMSCRIPTEN__
     std::cout << std::unitbuf;
+#endif // __EMSCRIPTEN__
 }
 
-LoggerBuf::LoggerBuf(const std::string &file_name, bool output_to_console) :
-        m_file(file_name), m_has_file(true), m_output_to_console(output_to_console)
+LoggerBuf::LoggerBuf(std::string *buffer, const std::string &file_name, bool output_to_console) :
+        m_buffer(buffer), m_file(file_name), m_has_file(true), m_output_to_console(output_to_console)
 {
+#ifndef __EMSCRIPTEN__
     if(m_output_to_console) {
         std::cout << std::unitbuf;
     }
+#endif // __EMSCRIPTEN__
 
     if(!m_file.is_open()) {
         m_has_file = false;
@@ -198,7 +189,7 @@ int LoggerBuf::overflow(int c)
 {
     if (m_output_to_console) {
 #ifdef __EMSCRIPTEN__
-        m_output.append(std::to_string(c).c_str());
+        m_buffer->append(std::to_string(c).c_str());
 #else
         std::cout.put(c);
 #endif // __EMSCRIPTEN__
@@ -209,11 +200,12 @@ int LoggerBuf::overflow(int c)
     return c;
 }
 
+// overrides std::basic_streambuf::xsputn method
 std::streamsize LoggerBuf::xsputn(const char* s, std::streamsize n)
 {
     if (m_output_to_console) {
 #ifdef __EMSCRIPTEN__
-        m_output.append(s);
+        m_buffer->append(s);
 #else
         std::cout.write(s, n);
 #endif // __EMSCRIPTEN__
@@ -236,11 +228,11 @@ std::streamsize LoggerBuf::xsputn(const char* s, std::streamsize n)
  * called, `emscripten_log()` is called (passing the string buffer) and clears the string buffer.
  */
 void Logger::js_flush() {
-    if (m_output.empty()) return;
-    emscripten_log(EM_LOG_CONSOLE, m_output.c_str());
-    m_output.clear();
+    if (m_buffer.empty()) return; // make sure m_buffer isn't empty
+    emscripten_log(EM_LOG_CONSOLE, m_buffer.c_str());
+    m_buffer.clear();
 }
 #endif // __EMSCRIPTEN__
 
 // In the Astron daemon source, this is defined in `src/global.cpp`.
-std::unique_ptr<Logger> g_logger(new Logger);
+std::unique_ptr<Logger> g_logger(new Logger());

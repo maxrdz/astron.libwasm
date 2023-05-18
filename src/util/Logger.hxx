@@ -70,16 +70,14 @@ extern NullBuffer null_buffer;
 // A LoggerBuf is a stream buffer that outputs to either a file or the console (std::cout).
 class LoggerBuf : public std::streambuf {
 public:
-    LoggerBuf();
-    LoggerBuf(const std::string &file_name, bool output_to_console = true);
+    LoggerBuf(std::string *buffer);
+    LoggerBuf(std::string *buffer, const std::string &file_name, bool output_to_console = true);
 
 protected:
     int overflow(int c = EOF);
     std::streamsize xsputn(const char* s, std::streamsize n);
 private:
-#ifdef __EMSCRIPTEN__
-    std::string m_output;
-#endif // __EMSCRIPTEN__
+    std::string *m_buffer;
     std::ofstream m_file;
     bool m_has_file;
     bool m_output_to_console;
@@ -87,33 +85,17 @@ private:
 
 class LockedLogOutput {
 public:
-#ifndef __EMSCRIPTEN__
     LockedLogOutput(std::ostream *stream, std::recursive_mutex *lock) : m_stream(stream), m_lock(lock) {
         if (m_lock) {
             m_lock->lock();
         }
     }
-#else
-    LockedLogOutput(std::string *output, std::recursive_mutex *lock) : m_output(output), m_lock(lock) {
-        if (m_lock) {
-            m_lock->lock();
-        }
-    }
-#endif // __EMSCRIPTEN__
 
-#ifndef __EMSCRIPTEN__
     LockedLogOutput(const LockedLogOutput& other) : m_stream(other.m_stream), m_lock(other.m_lock) {
         if (m_lock) {
             m_lock->lock();
         }
     }
-#else
-    LockedLogOutput(const LockedLogOutput& other) : m_output(other.m_output), m_lock(other.m_lock) {
-        if (m_lock) {
-            m_lock->lock();
-        }
-    }
-#endif // __EMSCRIPTEN__
 
     LockedLogOutput& operator=(const LockedLogOutput&) = delete;   // non copyable
 
@@ -125,49 +107,28 @@ public:
 
     template <typename T>
     LockedLogOutput &operator<<(const T &x) {
-#ifndef __EMSCRIPTEN__
         if (m_stream) {
             *m_stream << x;
         }
-#else
-        if (m_output) {
-            m_output->append(x);
-        }
-#endif // __EMSCRIPTEN__
         return *this;
     }
 
     LockedLogOutput& operator<<(std::ostream & (*pf)(std::ostream&)) {
-#ifndef __EMSCRIPTEN__
         if (m_stream) {
             *m_stream << pf;
         }
-#else
-        if (m_output) {
-            std::ostringstream ss;
-            ss << pf;
-            std::string temp = ss.str();
-            m_output->append(temp);
-        }
-#endif // __EMSCRIPTEN__
         return *this;
     }
 
     LockedLogOutput& operator<<(std::basic_ios<char>& (*pf)(std::basic_ios<char>&)) {
-#ifndef __EMSCRIPTEN__
         if (m_stream) {
             *m_stream << pf;
         }
-#endif // __EMSCRIPTEN__
         return *this;
     }
 
 private:
-#ifndef __EMSCRIPTEN__
     std::ostream *m_stream;
-#else
-    std::string *m_output;
-#endif // __EMSCRIPTEN__
     std::recursive_mutex *m_lock;
 };
 
@@ -200,11 +161,8 @@ private:
 
     LoggerBuf m_buf;
     LogSeverity m_severity;
-#ifndef __EMSCRIPTEN__
+    std::string m_buffer;
     std::ostream m_output;
-#else
-    std::string m_output;
-#endif // __EMSCRIPTEN__
     std::recursive_mutex m_lock;
     bool m_color_enabled;
 };

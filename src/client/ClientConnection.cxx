@@ -28,9 +28,7 @@ namespace astron { // open namespace
     void ClientConnection::connect(std::string uri, uint32_t dc_hash, std::string version) {
         logger().info() << "Connecting to Client Agent at '" << uri << "' with version '" << version << "'";
         g_logger->js_flush();
-        std::stringstream sstream;
-        sstream << std::hex << dc_hash;
-        logger().debug() << "Client DC Hash: 0x" << sstream.str();
+        logger().debug() << "Client DC Hash: 0x" << std::hex << dc_hash;
         g_logger->js_flush();
     }
 
