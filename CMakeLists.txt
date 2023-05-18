@@ -38,9 +38,9 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -gsource-map") # -g4 deprecated
 if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
     set(ENV{EMCC_DEBUG} 1) # enable emcc debugging
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -sASSERTIONS=2 -sSTACK_OVERFLOW_CHECK=1 --emrun")
-    # Compile & link with Clang's undefined behavior sanitized (UBSan)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=undefined -sSAFE_HEAP=1")
+    # Compile & link with Clang's undefined behavior and address sanitizers (UBSan & ASan)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined -fsanitize=address")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=undefined -fsanitize=address")
     add_compile_definitions(ASTRON_DEBUG_MESSAGES) # enable astron logger debug output
 endif()
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -g0 -Oz")
