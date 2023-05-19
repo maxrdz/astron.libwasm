@@ -1,6 +1,6 @@
 # Overwrite CXX flags / linker flags for this directory
 set(CMAKE_CXX_FLAGS "-Wall -Wextra")
-set(CMAKE_EXE_LINKER_FLAGS "-sWASM=1")
+set(CMAKE_EXE_LINKER_FLAGS "-sWASM=1 -lwebsocket.js")
 
 if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
     # Compile & link with Clang's undefined behavior and address sanitizers (UBSan & ASan)

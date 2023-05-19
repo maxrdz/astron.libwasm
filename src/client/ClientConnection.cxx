@@ -22,7 +22,7 @@
 
 namespace astron { // open namespace
 
-    ClientConnection::ClientConnection() : m_log("msgdir", "Client Connection") {
+    ClientConnection::ClientConnection() {
     }
 
     void ClientConnection::connect(std::string uri, uint32_t dc_hash, std::string version) {

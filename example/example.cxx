@@ -26,7 +26,6 @@ public:
 
 void MyReactor::run(std::string astron_addr) {
     connect(astron_addr, (uint32_t)0, "v0.0.0");
-    poll_forever();
 }
 
 int main(int argc, char* argv[]) {
