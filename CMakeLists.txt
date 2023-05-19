@@ -49,8 +49,8 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -g0 -Oz")
 # =========== CMake Options ============
 # ======================================
 
-# Use the Boost headers from emscripten-ports. Currently required.
-option(USE_BOOST "Passes `-sUSE_BOOST_HEADERS=1` to the compiler & linker. Currently required." true)
+# Use the Boost headers from emscripten-ports. Was previously required, now it's not used.
+option(USE_BOOST "Passes `-sUSE_BOOST_HEADERS=1` to the compiler & linker." false)
 
 # Enables compiling & linking to wasm64. This is currently experimental in Emscripten!
 option(WASM64 "Passes `-sMEMORY64=1` to the compiler & linker. This is experimental! Default: false." false)
