@@ -79,12 +79,20 @@ endif()
 
 ######### Define Components ########
 set(SOURCE_FILES
+        # util
         src/util/Logger.cxx
+        # dc file
         src/dcfile/dcparser_composite1.cxx
         src/dcfile/dcparser_composite2.cxx
         src/dcfile/dcLexer.cxx
         src/dcfile/dcParser.cxx
+        # network
         src/network/Connection.cxx
+        # object
+        src/object/DistributedObject.cxx
+        src/object/ObjectFactory.cxx
+        src/object/ObjectRepository.cxx
+        # client
         src/client/ClientConnection.cxx
 )
 add_library(astron STATIC ${SOURCE_FILES})

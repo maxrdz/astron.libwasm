@@ -1,5 +1,4 @@
 /*
- * Copyright (c) 2014, Astron Contributors. All rights reserved.
  * Copyright (c) 2023, Max Rodriguez. All rights reserved.
  *
  * All use of this software is subject to the terms of the revised BSD
@@ -7,8 +6,8 @@
  * with this source code in a file named "COPYING".
  *
  * @file Connection.hxx
- * @author Astron Contributors
- * @date 2023-04-30
+ * @author Max Rodriguez
+ * @date 2023-05-18
  */
 
 #ifndef ASTRON_LIBWASM_NETWORKCLIENT_HXX
