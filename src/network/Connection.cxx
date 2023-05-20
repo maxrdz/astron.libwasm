@@ -23,6 +23,7 @@ namespace astron { // open namespace
     {
         // check websocket support on this browser
         EM_BOOL ws_support = emscripten_websocket_is_supported();
+
         if (!ws_support) {
             logger().error() << "WebSocket is not supported in your browser. Please upgrade your browser!";
             g_logger->js_flush();
@@ -34,8 +35,15 @@ namespace astron { // open namespace
 
     Connection::~Connection() // destructor
     {
+        if (m_socket) {
+            disconnect(0, "Connection instance destructor called with open web socket.");
+        }
     }
 
-
+    EMSCRIPTEN_RESULT Connection::disconnect(unsigned short code, const char *reason) {
+        EMSCRIPTEN_RESULT res = emscripten_websocket_close(m_socket, code, reason);
+        m_socket = 0; // reset m_socket value
+        return res;
+    }
 
 } // close namespace astron

@@ -32,10 +32,11 @@ namespace astron { // open namespace
         inline LogCategory& logger() {
             return m_log;
         }
+        EMSCRIPTEN_RESULT disconnect(unsigned short code, const char *reason);
     protected:
         LogCategory m_log;
     private:
-        EMSCRIPTEN_WEBSOCKET_T m_socket; // int
+        EMSCRIPTEN_WEBSOCKET_T m_socket = 0; // int
     };
 } // close namespace
 
