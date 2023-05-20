@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.22 FATAL_ERROR)
 set(name astron.libwasm)
 project(${name})
 include_directories(src)
-set(CMAKE_EXECUTABLE_SUFFIX ".html") # Output HTML wrapper to launch WASM binary
 
 if (NOT EMSCRIPTEN)
     return() # Currently only building with Emscripten
@@ -24,27 +23,6 @@ endif()
 set(CMAKE_CXX_STANDARD 11) # We need gnu+11 to compile with Boost.
 set(CXX_STANDARD_REQUIRED ON)
 
-# ===============================================
-# ========== Compiler / Linker Flags ============
-# ===============================================
-
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lwebsocket.js -sWASM=1 -sASYNCIFY --no-entry")
-# Ignore 'unused_xxx' warnings
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function")
-
-# Debug & Release compiler flags
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -gsource-map") # -g4 deprecated
-if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
-    set(ENV{EMCC_DEBUG} 1) # enable emcc debugging
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -sASSERTIONS=2 -sSTACK_OVERFLOW_CHECK=1 --emrun")
-    # Compile & link with Clang's undefined behavior and address sanitizers (UBSan & ASan)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined -fsanitize=address")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=undefined -fsanitize=address")
-    add_compile_definitions(ASTRON_DEBUG_MESSAGES) # enable astron logger debug output
-endif()
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -g0 -Oz")
-
 # ======================================
 # =========== CMake Options ============
 # ======================================
@@ -60,6 +38,18 @@ option(USE_32BIT_DATAGRAMS "Datagrams and dclass fields will use 32-bit length t
 
 # Use 128-bit channel IDs over the wire
 option(USE_128BIT_CHANNELS "Compile with support for 128-bit channel IDs. Experimental." false)
+
+# Build example WASM binaries with static library
+option(BUILD_EXAMPLE "Builds the example WASM binaries along with the static library." true)
+
+# ===============================================
+# ========== Compiler / Linker Flags ============
+# ===============================================
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lwebsocket.js -sWASM=1 --no-entry")
+# Ignore 'unused_xxx' warnings
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function")
 
 if(USE_BOOST)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -sUSE_BOOST_HEADERS=1")
@@ -77,7 +67,27 @@ if(USE_128BIT_CHANNELS)
     add_compile_definitions(ASTRON_128BIT_CHANNELS)
 endif()
 
-######### Define Components ########
+# ==============================================
+# =========== Debug / Release flags ============
+# ==============================================
+
+if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -gsource-map") # -g4 deprecated
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -sASSERTIONS=2 -sSTACK_OVERFLOW_CHECK=1 --emrun")
+
+    # Compile & link with Clang's undefined behavior and address sanitizers (UBSan & ASan)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined -fsanitize=address")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=undefined -fsanitize=address")
+
+    add_compile_definitions(ASTRON_DEBUG_MESSAGES) # enable astron logger debug output
+else()
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -g0 -Oz")
+endif()
+
+# ===============================================
+# ========== Define Source Components ===========
+# ===============================================
+
 set(SOURCE_FILES
         # util
         src/util/Logger.cxx
@@ -95,7 +105,9 @@ set(SOURCE_FILES
         # client
         src/client/ClientConnection.cxx
 )
-add_library(astron STATIC ${SOURCE_FILES})
+add_library(astron STATIC ${SOURCE_FILES}) # builds libastron.a
 
-######### Example WASM Binaries #########
-add_subdirectory(example)
+if(BUILD_EXAMPLE) # build example WASM binaries
+    set(CMAKE_EXECUTABLE_SUFFIX ".html") # Output Emscripten's HTML wrapper
+    add_subdirectory(example)
+endif()
