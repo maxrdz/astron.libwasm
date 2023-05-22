@@ -12,8 +12,10 @@
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
-#else
-#define EMSCRIPTEN_KEEPALIVE
+#endif
+#ifdef HAVE_PANDA
+#include <panda3d/pandaFramework.h>
+#include <panda3d/pandaSystem.h>
 #endif
 
 #include "../src/client/ClientConnection.hxx"
@@ -29,6 +31,18 @@ void MyReactor::run(std::string astron_addr) {
 }
 
 int main(int argc, char* argv[]) {
+#ifdef HAVE_PANDA
+    // Open a new window framework
+    PandaFramework framework;
+    framework.open_framework(argc, argv);
+    framework.set_window_title("My Panda3D Window");
+    WindowFramework *window = framework.open_window();
+#endif
     MyReactor reactor;
     reactor.run("127.0.0.1"); // MD on loop back interface
+
+#ifdef HAVE_PANDA
+    framework.main_loop();
+    framework.close_framework();
+#endif
 }

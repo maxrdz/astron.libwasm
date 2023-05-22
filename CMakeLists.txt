@@ -30,6 +30,11 @@ set(CXX_STANDARD_REQUIRED ON)
 # Use the Boost headers from emscripten-ports. Was previously required, now it's not used.
 option(USE_BOOST "Passes `-sUSE_BOOST_HEADERS=1` to the compiler & linker." false)
 
+# (ONLY applies to example target) Link with Panda3D (webgl-port) static libraries.
+# The WebGL port of Panda3D is WIP. For instructions on building, see: https://rdb.name/panda3d-webgl.md.html
+# TODO: set default to false
+option(USE_PANDA "Link example WASM with WebGL Panda3D static libraries. Read CMakeLists.txt for more info." true)
+
 # Enables compiling & linking to wasm64. This is currently experimental in Emscripten!
 option(WASM64 "Passes `-sMEMORY64=1` to the compiler & linker. This is experimental! Default: false." false)
 
@@ -73,7 +78,7 @@ endif()
 
 if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -gsource-map") # -g4 deprecated
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -sASSERTIONS=2 -sSTACK_OVERFLOW_CHECK=1 --emrun")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -sASSERTIONS=2 -sSTACK_OVERFLOW_CHECK=1")
 
     # Compile & link with Clang's undefined behavior and address sanitizers (UBSan & ASan)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined -fsanitize=address")
