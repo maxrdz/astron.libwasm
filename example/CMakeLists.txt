@@ -8,7 +8,7 @@ if(USE_PANDA) # if USE_PANDA=1, link with the Panda3D webgl-port static librarie
 
     # Assuming you built Panda with the following dependencies: ZLib (static libraries)
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lz -lpanda -lpandaexpress \
-    -lp3dtool -lp3dtoolconfig -lp3webgldisplay -lp3framework -lp3openal_audio -lp3direct")
+    -lp3dtool -lp3dtoolconfig -lp3webgldisplay -lp3framework -lp3openal_audio -lp3interrogatedb -lp3direct")
 
     # Copy the include/ folder built by Panda (when you built it targeting Emscripten) to
     # /usr/local/include and rename it to 'panda3d-webgl'.

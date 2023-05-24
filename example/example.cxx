@@ -17,10 +17,12 @@
 #include <panda3d-webgl/pandaFramework.h>
 #include <panda3d-webgl/pandaSystem.h>
 
-extern void init_libOpenALAudio();
-extern void init_libpnmimagetypes();
-extern void init_libwebgldisplay();
-extern void task_manager_poll();
+// must use extern "C" to avoid mangling the function name
+// or else the linker will claim these are undefined symbols.
+extern "C" void init_libOpenALAudio();
+extern "C" void init_libpnmimagetypes();
+extern "C" void init_libwebgldisplay();
+extern "C" void task_manager_poll();
 #endif
 
 #include "../src/client/ClientConnection.hxx"
@@ -53,5 +55,6 @@ int main(int argc, char* argv[]) {
     emscripten_set_main_loop(&task_manager_poll, 0, 0);
     framework.main_loop();
     framework.close_framework();
+    return 0;
 #endif
 }
