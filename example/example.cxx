@@ -14,8 +14,13 @@
 #include <emscripten.h>
 #endif
 #ifdef HAVE_PANDA
-#include <panda3d/pandaFramework.h>
-#include <panda3d/pandaSystem.h>
+#include <panda3d-webgl/pandaFramework.h>
+#include <panda3d-webgl/pandaSystem.h>
+
+extern void init_libOpenALAudio();
+extern void init_libpnmimagetypes();
+extern void init_libwebgldisplay();
+extern void task_manager_poll();
 #endif
 
 #include "../src/client/ClientConnection.hxx"
@@ -42,6 +47,10 @@ int main(int argc, char* argv[]) {
     reactor.run("127.0.0.1"); // MD on loop back interface
 
 #ifdef HAVE_PANDA
+    init_libOpenALAudio();
+    init_libpnmimagetypes();
+    init_libwebgldisplay();
+    emscripten_set_main_loop(&task_manager_poll, 0, 0);
     framework.main_loop();
     framework.close_framework();
 #endif

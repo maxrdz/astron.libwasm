@@ -2,14 +2,21 @@
 set(CMAKE_CXX_FLAGS "-Wall -Wextra")
 set(CMAKE_EXE_LINKER_FLAGS "-sWASM=1 -lwebsocket.js")
 
-if(USE_PANDA) # if USE_PANDA=1, link with the Panda3D webgl-port static librarys
+if(USE_PANDA) # if USE_PANDA=1, link with the Panda3D webgl-port static libraries
     # NOTE: All panda static libraries (.a / .lib) should be under the `example/` directory.
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -L${CMAKE_CURRENT_SOURCE_DIR} -L/usr/local/lib")
-    # Assuming you built Panda with the following dependencies: ZLib, Vorbis, FreeType (static libraries)
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lz -lp3framework -lpanda -lpandaexpress")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lp3dtoolconfig -lp3dtool -lp3openal_audio -lp3direct")
-    # Path to Panda3D system header files
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I/usr/local/include/")
+
+    # Assuming you built Panda with the following dependencies: ZLib (static libraries)
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lz -lpanda -lpandaexpress \
+    -lp3dtool -lp3dtoolconfig -lp3webgldisplay -lp3framework -lp3openal_audio -lp3direct")
+
+    # Copy the include/ folder built by Panda (when you built it targeting Emscripten) to
+    # /usr/local/include and rename it to 'panda3d-webgl'.
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I/usr/local/include/ -fno-exceptions -fno-rtti")
+
+    # Additional linker flags as used in 'freezify.py' from rdb's panda webgl samples
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -s MAX_WEBGL_VERSION=2 -s NO_EXIT_RUNTIME=1 \
+    -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s DISABLE_EXCEPTION_THROWING=0 -fno-exceptions -fno-rtti")
     add_compile_definitions(HAVE_PANDA)
 endif()
 
