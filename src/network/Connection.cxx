@@ -41,9 +41,17 @@ namespace astron { // open namespace
     }
 
     EMSCRIPTEN_RESULT Connection::disconnect(unsigned short code, const char *reason) {
+        if (!m_socket) {
+            logger().warning() << "Connection::disconnect() called, but m_socket is 0 (no socket).";
+            g_logger->js_flush();
+            return EMSCRIPTEN_RESULT_SUCCESS;
+        }
         EMSCRIPTEN_RESULT res = emscripten_websocket_close(m_socket, code, reason);
+        if (res != EMSCRIPTEN_RESULT_SUCCESS) {
+            return res; // EMSCRIPTEN_RESULT_SUCCESS == 0
+        }
+        res = emscripten_websocket_delete(m_socket); // free socket handle from memory
         m_socket = 0; // reset m_socket value
         return res;
     }
-
 } // close namespace astron
