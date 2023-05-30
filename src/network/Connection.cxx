@@ -29,15 +29,27 @@ namespace astron { // open namespace
             g_logger->js_flush();
             emscripten_force_exit(1); // exit w/ code 1 (error)
         }
-        // create a new emscripten websocket
-        //m_socket = emscripten_websocket_new();
     }
 
     Connection::~Connection() // destructor
     {
         if (m_socket) {
-            disconnect(0, "Connection instance destructor called with open web socket.");
+            disconnect(1000, "Connection instance destructor called with open web socket.");
         }
+    }
+
+    void Connection::connect_socket(std::string url)
+    {
+        logger().info() << "Initializing WebSocket connection.";
+        g_logger->js_flush();
+
+        // create a new emscripten websocket
+        EmscriptenWebSocketCreateAttributes ws_attributes;
+        url.insert(0, "wss://"); // must have 'wss://' prefix
+        ws_attributes.url = url.c_str();
+        ws_attributes.protocols = "binary";
+        ws_attributes.createOnMainThread = 1;
+        m_socket = emscripten_websocket_new(&ws_attributes); // returns EMSCRIPTEN_WEBSOCKET_T
     }
 
     EMSCRIPTEN_RESULT Connection::disconnect(unsigned short code, const char *reason) {

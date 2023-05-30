@@ -31,6 +31,7 @@ namespace astron { // open namespace
         std::stringstream ss; ss << std::hex << dc_hash; // convert uint32_t to hex string
         logger().debug() << "Client DC Hash: 0x" << ss.str();
         g_logger->js_flush();
+        connect_socket(uri); // connect websocket
     }
 
     void ClientConnection::disconnect() {

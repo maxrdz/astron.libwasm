@@ -32,6 +32,7 @@ namespace astron { // open namespace
         inline LogCategory& logger() {
             return m_log;
         }
+        void connect_socket(std::string url); // does not send Astron messages, just connects the websocket
         EMSCRIPTEN_RESULT disconnect(unsigned short code, const char *reason);
     protected:
         LogCategory m_log;
