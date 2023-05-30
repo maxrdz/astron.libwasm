@@ -3,6 +3,8 @@ set(CMAKE_CXX_FLAGS "-Wall -Wextra")
 set(CMAKE_EXE_LINKER_FLAGS "-sWASM=1 -lwebsocket.js")
 
 if(USE_PANDA) # if USE_PANDA=1, link with the Panda3D webgl-port static libraries
+    add_compile_definitions(HAVE_PANDA)
+
     # NOTE: All panda static libraries (.a / .lib) should be under the `example/` directory.
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -L${CMAKE_CURRENT_SOURCE_DIR} -L/usr/local/lib")
 
@@ -17,7 +19,6 @@ if(USE_PANDA) # if USE_PANDA=1, link with the Panda3D webgl-port static librarie
     # Additional linker flags as used in 'freezify.py' from rdb's panda webgl samples
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -s MAX_WEBGL_VERSION=2 -s NO_EXIT_RUNTIME=1 \
     -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s DISABLE_EXCEPTION_THROWING=0 -s ALLOW_MEMORY_GROWTH -fno-exceptions -fno-rtti")
-    add_compile_definitions(HAVE_PANDA)
 endif()
 
 if(${CMAKE_BUILD_TYPE} MATCHES "Debug")

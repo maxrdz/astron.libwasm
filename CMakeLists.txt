@@ -61,6 +61,11 @@ if(USE_BOOST)
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -sUSE_BOOST_HEADERS=1")
     add_compile_definitions(BOOST_ASIO_HAS_PTHREADS) # Fixes "Only Windows and POSIX are supported!" error.
 endif()
+if(USE_PANDA)
+    # Panda WebGL port requires these compiler/linker flags.
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-exceptions -fno-rtti")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -s DISABLE_EXCEPTION_THROWING=0 -fno-exceptions -fno-rtti")
+endif()
 if(WASM64)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -sMEMORY64=1")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -sMEMORY64=1")
