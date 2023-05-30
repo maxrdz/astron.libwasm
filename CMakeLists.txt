@@ -32,8 +32,7 @@ option(USE_BOOST "Passes `-sUSE_BOOST_HEADERS=1` to the compiler & linker." fals
 
 # (ONLY applies to example target) Link with Panda3D (webgl-port) static libraries.
 # The WebGL port of Panda3D is WIP. For instructions on building, see: https://rdb.name/panda3d-webgl.md.html
-# TODO: set default to false
-option(USE_PANDA "Link example WASM with WebGL Panda3D static libraries. Read CMakeLists.txt for more info." true)
+option(USE_PANDA "Link example WASM with WebGL Panda3D static libraries. Read CMakeLists.txt for more info." false)
 
 # Enables compiling & linking to wasm64. This is currently experimental in Emscripten!
 option(WASM64 "Passes `-sMEMORY64=1` to the compiler & linker. This is experimental! Default: false." false)
