@@ -56,7 +56,8 @@ int main(int argc, char* argv[]) {
     window->get_graphics_window()->set_clear_color(LVecBase4(0.5f, 0.5f, 0.5f, 1.0f)); // r g b a
 #endif
     MyReactor reactor;
-    reactor.run("127.0.0.1"); // MD on loop back interface
+    //reactor.run("127.0.0.1"); // MD on loop back interface
+    reactor.run("ws.postman-echo.com/raw"); // secure websocket test
 
 #ifdef HAVE_PANDA
     framework.main_loop();
