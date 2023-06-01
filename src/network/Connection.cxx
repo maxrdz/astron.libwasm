@@ -83,11 +83,20 @@ namespace astron { // open namespace
             g_logger->js_flush();
             return EMSCRIPTEN_RESULT_SUCCESS;
         }
-        EMSCRIPTEN_RESULT res = emscripten_websocket_close(m_socket, code, reason);
-        if (res != EMSCRIPTEN_RESULT_SUCCESS) {
-            return res; // EMSCRIPTEN_RESULT_SUCCESS == 0
+        // check ready state. only close if ready
+        unsigned short socket_ready_state;
+        emscripten_websocket_get_ready_state(m_socket, &socket_ready_state);
+
+        if (socket_ready_state) {
+            EMSCRIPTEN_RESULT res = emscripten_websocket_close(m_socket, code, reason);
+            if (res != EMSCRIPTEN_RESULT_SUCCESS)
+            {
+                logger().fatal() << "Failed to close a ready websocket.";
+                g_logger->js_flush();
+                return res; // EMSCRIPTEN_RESULT_SUCCESS == 0
+            }
         }
-        res = emscripten_websocket_delete(m_socket); // free socket handle from memory
+        EMSCRIPTEN_RESULT res = emscripten_websocket_delete(m_socket); // free socket handle from memory
         m_socket = 0; // reset m_socket value
         return res;
     }
@@ -114,7 +123,7 @@ namespace astron { // open namespace
     EM_BOOL Connection::on_open(int eventType, const EmscriptenWebSocketOpenEvent *websocketEvent, void *userData)
     {
         Connection* self = (Connection*)userData;
-        self->logger().info() << "Received Emscripten WebSocket open event!";
+        self->logger().debug() << "Received Emscripten WebSocket open event!";
         g_logger->js_flush();
         return 1;
     }
@@ -122,6 +131,8 @@ namespace astron { // open namespace
     EM_BOOL Connection::on_close(int eventType, const EmscriptenWebSocketCloseEvent *websocketEvent, void *userData)
     {
         Connection* self = (Connection*)userData;
+        self->logger().debug() << "Received Emscripten WebSocket close event.";
+        g_logger->js_flush();
         return 1;
     }
 
