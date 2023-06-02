@@ -40,6 +40,7 @@ public:
 
 void MyReactor::run(std::string astron_addr) {
     connect(astron_addr, (uint32_t)0, "v0.0.0");
+    poll_forever(); // have the library create an emscripten main loop for you
 }
 
 int main(int argc, char* argv[]) {
@@ -56,12 +57,11 @@ int main(int argc, char* argv[]) {
     window->get_graphics_window()->set_clear_color(LVecBase4(0.5f, 0.5f, 0.5f, 1.0f)); // r g b a
 #endif
     MyReactor reactor;
-    //reactor.run("127.0.0.1"); // MD on loop back interface
-    reactor.run("ws.postman-echo.com/raw"); // secure websocket test
+    reactor.run("127.0.0.1:8080"); // websocket proxy on loop back interface (proxying to client agent)
 
 #ifdef HAVE_PANDA
     framework.main_loop();
     framework.close_framework();
-    return 0;
 #endif
+    return 0;
 }

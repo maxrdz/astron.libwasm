@@ -38,8 +38,18 @@ namespace astron { // open namespace
         }
     }
 
-    void Connection::em_main_loop() {
-        // emscripten main loop
+    void Connection::em_main_loop(void *arg)
+    {
+        Connection* self = (Connection*)arg;
+        // if socket is not ready, don't do anything this 'frame'
+        unsigned short socket_ready_state;
+        emscripten_websocket_get_ready_state(self->get_em_socket(), &socket_ready_state);
+        if (!socket_ready_state) return;
+        // TODO: poll
+    }
+
+    void Connection::poll_forever() {
+        emscripten_set_main_loop_arg(this->em_main_loop, this, this->em_loop_fps, this->em_simulate_infinite_loop);
     }
 
     void Connection::connect_socket(std::string url)
@@ -72,8 +82,6 @@ namespace astron { // open namespace
             emscripten_websocket_deinitialize();
             emscripten_force_exit(1); // exit w/ code 1 (error)
         }
-        // set main loop via emscripten
-        emscripten_set_main_loop(this->em_main_loop, this->em_loop_fps, this->em_simulate_infinite_loop);
     }
 
     EMSCRIPTEN_RESULT Connection::disconnect(unsigned short code, const char *reason)

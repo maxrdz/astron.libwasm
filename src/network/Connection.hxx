@@ -33,6 +33,7 @@ namespace astron { // open namespace
             return m_log;
         }
         void connect_socket(std::string url); // does not send Astron messages, just connects the websocket
+        void poll_forever();
         EMSCRIPTEN_RESULT disconnect(unsigned short code, const char *reason);
         EMSCRIPTEN_WEBSOCKET_T get_em_socket();
 
@@ -44,7 +45,7 @@ namespace astron { // open namespace
         }
 
     private:
-        static void em_main_loop();
+        static void em_main_loop(void *arg);
         int em_loop_fps = 60;
         int em_simulate_infinite_loop = 0;
         EMSCRIPTEN_WEBSOCKET_T m_socket = 0; // int
