@@ -38,7 +38,7 @@ namespace astron { // open namespace
 
     protected:
         LogCategory m_log;
-        bool secure_websocket = true; // default ws://
+        bool secure_websocket = false; // default ws://
         inline void set_secure_websocket(bool value) {
             secure_websocket = value;
         }
