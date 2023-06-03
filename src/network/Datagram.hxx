@@ -164,6 +164,14 @@ namespace astron { // open namespace
             buf_end += str.length();
         }
 
+        void add_string(const char *c_str) {
+            std::string str(c_str); // still using std::string to easily get length
+            add_uint16(str.length());
+            check_add_length(str.length());
+            memcpy(buf + buf_end, str.c_str(), str.length());
+            buf_end += str.length();
+        }
+
         void add_blob(const std::vector <uint8_t> &blob) {
             add_uint16(blob.size());
             check_add_length(blob.size());
