@@ -15,6 +15,8 @@
 #endif // __EMSCRIPTEN__
 
 #include <emscripten/websocket.h>
+#include "Datagram.hxx"
+#include "../client/messageTypes.hxx"
 #include "Connection.hxx"
 
 namespace astron { // open namespace
@@ -40,14 +42,15 @@ namespace astron { // open namespace
 
     void Connection::em_main_loop(void *arg)
     {
-        Connection* self = (Connection*)arg;
+        Connection* self = static_cast<Connection*>(arg);
         // if socket is not ready, don't do anything this 'frame'
         unsigned short socket_ready_state;
         emscripten_websocket_get_ready_state(self->get_em_socket(), &socket_ready_state);
         if (!socket_ready_state) return;
-        // TODO: poll
+        self->poll_datagram();
     }
 
+    /* Polls datagrams forever using an emscripten loop */
     void Connection::poll_forever() {
         emscripten_set_main_loop_arg(this->em_main_loop, this, this->em_loop_fps, this->em_simulate_infinite_loop);
     }
@@ -62,7 +65,7 @@ namespace astron { // open namespace
         if (this->secure_websocket) { url.insert(0, "wss://"); } else { url.insert(0, "ws://"); }
         ws_attributes.url = url.c_str();
         ws_attributes.protocols = "binary";
-        ws_attributes.createOnMainThread = 1;
+        ws_attributes.createOnMainThread = EM_TRUE;
         m_socket = emscripten_websocket_new(&ws_attributes); // returns EMSCRIPTEN_WEBSOCKET_T
 
         if (m_socket < 0) { // if < 0, creation failed
@@ -109,6 +112,16 @@ namespace astron { // open namespace
         return res;
     }
 
+    void Connection::poll_datagram() {
+        //Datagram dg = Datagram();
+        //dg.add_uint16((uint16_t)CLIENT_HELLO); // msg type
+        //dg.add_uint32((uint32_t)0); // dc hash
+        //dg.add_string("v0.0.0"); // version string
+        //uint32_t dataLen = (uint32_t)dg.size();
+        //void* data = (void*)dg.get_data();
+        //emscripten_websocket_send_binary(m_socket, data, dataLen);
+    }
+
     EM_BOOL Connection::on_error(int eventType, const EmscriptenWebSocketErrorEvent *websocketEvent, void *userData)
     {
         /* Since callback functions have to be static, we have no access to our class instance.
@@ -116,7 +129,7 @@ namespace astron { // open namespace
          * the *userData to a Connection* pointer, which serves as the equivalent of 'this'.
          * NOTE: You can only access public members of the Connection instance that set this callback.
          */
-        Connection* self = (Connection*)userData;
+        Connection* self = static_cast<Connection*>(userData);
         self->logger().fatal() << "Received Emscripten WebSocket error event!";
         g_logger->js_flush();
         return 1;
@@ -124,13 +137,13 @@ namespace astron { // open namespace
 
     EM_BOOL Connection::on_message(int eventType, const EmscriptenWebSocketMessageEvent *websocketEvent, void *userData)
     {
-        Connection* self = (Connection*)userData;
+        Connection* self = static_cast<Connection*>(userData);
         return 1;
     }
 
     EM_BOOL Connection::on_open(int eventType, const EmscriptenWebSocketOpenEvent *websocketEvent, void *userData)
     {
-        Connection* self = (Connection*)userData;
+        Connection* self = static_cast<Connection*>(userData);
         self->logger().debug() << "Received Emscripten WebSocket open event!";
         g_logger->js_flush();
         return 1;
@@ -138,14 +151,24 @@ namespace astron { // open namespace
 
     EM_BOOL Connection::on_close(int eventType, const EmscriptenWebSocketCloseEvent *websocketEvent, void *userData)
     {
-        Connection* self = (Connection*)userData;
+        Connection* self = static_cast<Connection*>(userData);
         self->logger().debug() << "Received Emscripten WebSocket close event.";
         g_logger->js_flush();
+        self->_call_handle_disconnect();
         return 1;
     }
 
+    /* Called after disconnect occurs. Can be overridden by the user. */
+    void Connection::handle_disconnect() {
+    }
+
+    /* needed for static callback to access this function */
+    void Connection::_call_handle_disconnect() {
+        this->handle_disconnect();
+    }
+
     EMSCRIPTEN_WEBSOCKET_T Connection::get_em_socket() {
-        return this->m_socket;
+        return m_socket;
     }
 
 } // close namespace astron

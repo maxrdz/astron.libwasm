@@ -29,7 +29,7 @@ namespace astron { // open namespace
         logger().info() << "Connecting to Client Agent at '" << uri << "' with version '" << version << "'";
         g_logger->js_flush();
         std::stringstream ss; ss << std::hex << dc_hash; // convert uint32_t to hex string
-        logger().debug() << "Client DC Hash: 0x" << ss.str();
+        logger().info() << "Client DC File Hash: 0x" << ss.str();
         g_logger->js_flush();
         connect_socket(uri); // connect websocket
     }
