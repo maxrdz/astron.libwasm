@@ -44,13 +44,8 @@ There is a considerable performance and size penalty to doing this; expect a lar
 
 Before writing your first contribution, please make sure to read the [contributing guidelines](CONTRIBUTING.md).
 
-**For astron.libwasm developers:** To regenerate the parser / lexer in `src/dcfile`,
-please use the following commands inside the `src/dcfile` directory:
-
-```bash
-$ bison dcParser.yxx -o dcParser.cxx --header
-$ flex --outfile dcLexer.cxx dcLexer.lxx
-```
+**For astron.libwasm developers:** To regenerate the parser / lexer in `src/file`,
+please use the bash script `lexparse.sh` inside the directory.
 
 # Reporting Vulnerabilities
 
