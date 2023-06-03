@@ -35,6 +35,8 @@ namespace astron { // open namespace
 
     Connection::~Connection() // destructor
     {
+        logger().debug() << "Connection destructor called.";
+        g_logger->js_flush();
         if (m_socket) {
             disconnect(1000, "Connection instance destructor called with open web socket.");
         }
@@ -50,7 +52,13 @@ namespace astron { // open namespace
         self->poll_datagram();
     }
 
-    /* Polls datagrams forever using an emscripten loop */
+    /* Polls datagrams forever using an emscripten loop.
+     *
+     * NOTE: If `poll_forever()` is called, the instance of this class
+     * (or of a class that inherits this class) MUST be dynamically allocated
+     * using the `new` operator. If this instance is allocated on the stack,
+     * then once the main loop is set, the instance is destroyed and issues occur.
+     * */
     void Connection::poll_forever() {
         emscripten_set_main_loop_arg(this->em_main_loop, this, this->em_loop_fps, this->em_simulate_infinite_loop);
     }

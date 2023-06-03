@@ -35,6 +35,7 @@ using namespace astron;
 
 class MyReactor : public ClientConnection {
 public:
+    MyReactor() {};
     void run(std::string astron_addr);
 };
 
@@ -56,8 +57,15 @@ int main(int argc, char* argv[]) {
     // set clear buffer color
     window->get_graphics_window()->set_clear_color(LVecBase4(0.5f, 0.5f, 0.5f, 1.0f)); // r g b a
 #endif
-    MyReactor reactor;
-    reactor.run("127.0.0.1:8080"); // websocket proxy on loop back interface (proxying to client agent)
+
+    /* It is VITAL that you dynamically allocate `MyReactor` via `new`.
+     * If you allocate it on the stack, it will be cleared from memory as
+     * soon as the emscripten main loop starts at `poll_forever()`.
+     * You can allocate it on the stack if you call `poll_datagram()`
+     * in your own loop that is in the scope where `MyReactor` is defined.
+     */
+    MyReactor *reactor = new MyReactor();
+    reactor->run("127.0.0.1:8080"); // websocket proxy on loop back interface (proxying to client agent)
 
 #ifdef HAVE_PANDA
     framework.main_loop();
