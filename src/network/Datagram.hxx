@@ -374,6 +374,16 @@ namespace astron { // open namespace
             buf_offset += length;
         }
 
+        /* Overload added by Max. Accepts const char* (string literal)
+         * without the need of providing a length. (uses std::string) */
+        void add_string(const char *c_str) {
+            std::string str = std::string(c_str);
+            add_size(str.length());
+            check_add_length(str.length());
+            memcpy(buf + buf_offset, str.c_str(), str.length());
+            buf_offset += str.length();
+        }
+
         // add_blob adds a dclass blob to the datagram from binary data;
         // a length tag (typically uint16_t) is prepended to the blob before it is added.
         void add_blob(const std::vector <uint8_t> &blob) {
