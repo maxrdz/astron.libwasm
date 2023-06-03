@@ -100,11 +100,26 @@ endif()
 set(SOURCE_FILES
         # util
         src/util/Logger.cxx
-        # dc file
-        src/dcfile/dcparser_composite1.cxx
-        src/dcfile/dcparser_composite2.cxx
-        src/dcfile/dcLexer.cxx
-        src/dcfile/dcParser.cxx
+        src/util/HashGenerator.cxx
+        src/util/PrimeNumberGenerator.cxx
+        # dc
+        src/dc/ArrayType.cpp
+        src/dc/Class.cpp
+        src/dc/DistributedType.cpp
+        src/dc/Field.cpp
+        src/dc/File.cpp
+        src/dc/KeywordList.cpp
+        src/dc/Method.cpp
+        src/dc/MolecularField.cpp
+        src/dc/NumericType.cpp
+        src/dc/Parameter.cpp
+        src/dc/Struct.cpp
+        # file
+        src/file/hash_legacy.cpp
+        src/file/lexer.cpp
+        src/file/parser.cpp
+        src/file/read.cpp
+        src/file/write.cpp
         # network
         src/network/Connection.cxx
         # object
