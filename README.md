@@ -32,6 +32,27 @@ $ cd build-release && make
 astron.libwasm is always compiled as a static library, not Web Assembly. It is compiled with Emscripten
 so that your own application can be linked with this static library and target Web Assembly.
 
+# Using Panda3D (webgl-port) in examples
+
+I've built in the option to compile the example programs with the **WebGL** port of Panda3D.
+This port of Panda can be viewed under the `webgl-port` branch of the Panda3D git repository.
+[Link to the webgl-port branch.](https://github.com/panda3d/panda3d/tree/webgl-port)
+
+This port of Panda targets Web Assembly. Due to its restrictions on the browser,
+and current specification, Panda has to be built into static libraries.
+It is then statically linked to the example program(s). You can view the
+[CMakeLists.txt](./CMakeLists.txt) file and how it links with Panda.
+
+Once you have the static libraries built, copy the `.a` (or `.lib`) files
+over to the `example/` directory of this repository. Use the `-DUSE_PANDA` flag when compiling the examples.
+Read the CMakeLists.txt file for specific instructions on where to move the generated Panda headers.
+
+For instructions on building Panda3D for WebGL with Emscripten, see
+[the building instructions](https://rdb.name/panda3d-webgl.md.html) written by rdb.
+
+**NOTE:** As of June 2023, I do have Panda linked with the example program correctly,
+but there is an issue with no output on the canvas. I haven't been able to resolve this issue.
+
 # Troubleshooting
 
 When using astron.libwasm, all output is flushed to the JavaScript console. In most browsers, pressing the F12 key should open this console.
