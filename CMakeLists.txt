@@ -128,7 +128,7 @@ set(SOURCE_FILES
         src/object/ObjectFactory.cxx
         src/object/ObjectRepository.cxx
         # client
-        src/client/ClientConnection.cxx
+        src/client/ClientRepository.cxx
 )
 add_library(astron STATIC ${SOURCE_FILES}) # builds libastron.a
 

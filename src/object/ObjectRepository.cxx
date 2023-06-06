@@ -11,9 +11,17 @@
  */
 
 #include "ObjectRepository.hxx"
+#include "ObjectFactory.hxx"
+#include "DistributedObject.hxx"
+#include "../network/Datagram.hxx"
+#include "../network/DatagramIterator.hxx"
 
 namespace astron { // open namespace
 
     ObjectRepository::ObjectRepository() {
     }
+
+    ObjectRepository::~ObjectRepository() {
+    }
+
 } // close namespace astron

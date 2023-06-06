@@ -134,7 +134,7 @@ namespace astron { // open namespace
 
     void Connection::send_datagram(const DatagramPtr &dg)
     {
-        DatagramPtr packet_dg = Datagram::create();
+        const DatagramPtr packet_dg = Datagram::create();
         packet_dg->add_uint16(dg->size()); // add uint16_t dg size header
         packet_dg->add_data(dg->get_data(), dg->size());
 

@@ -6,7 +6,7 @@
  * license. You should have received a copy of this license along
  * with this source code in a file named "COPYING".
  *
- * @file ClientConnection.cxx
+ * @file ClientRepository.cxx
  * @author kestred, Max Rodriguez
  * @date 2023-05-11
  */
@@ -17,15 +17,18 @@
 #define EMSCRIPTEN_KEEPALIVE
 #endif
 
-#include "ClientConnection.hxx"
+#include "ClientRepository.hxx"
 #include "messageTypes.hxx"
 
 namespace astron { // open namespace
 
-    ClientConnection::ClientConnection() {
+    ClientRepository::ClientRepository() {
     }
 
-    void ClientConnection::connect(std::string uri, uint32_t dc_hash, std::string version) {
+    ClientRepository::~ClientRepository() {
+    }
+
+    void ClientRepository::connect(std::string uri, uint32_t dc_hash, std::string version) {
         logger().info() << "Connecting to Client Agent at '" << uri << "' with version '" << version << "'";
         g_logger->js_flush();
         std::stringstream ss; ss << std::hex << dc_hash; // convert uint32_t to hex string

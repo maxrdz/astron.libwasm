@@ -6,7 +6,7 @@
  * license. You should have received a copy of this license along
  * with this source code in a file named "COPYING".
  *
- * @file ClientConnection.hxx
+ * @file ClientRepository.hxx
  * @author kestred, Max Rodriguez
  * @date 2023-05-11
  */
@@ -15,16 +15,17 @@
 #define ASTRON_LIBWASM_CLIENTCONNECTION_HXX
 
 #include "../util/Logger.hxx"
-#include "../network/Connection.hxx"
+#include "../object/ObjectRepository.hxx"
 
 namespace astron { // open namespace
 // Implementation Notes:
 //     If necessary connection can subclass another class (maybe NetworkClient for example);
 //     However, any inherited virtual functions must be implemented. Subclasses of connection
 //     should only be required to implement handle_datagram.
-    class ClientConnection : public Connection {
+    class ClientRepository : public ObjectRepository {
     public:
-        ClientConnection();
+        ClientRepository();
+        ~ClientRepository();
 
         // connect starts a connection to the server, negotiates Hello and starts sending
         // heartbeats periodically. It returns after negotiation is complete.

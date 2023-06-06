@@ -13,11 +13,14 @@
 #ifndef ASTRON_LIBWASM_OBJECTREPOSITORY_HXX
 #define ASTRON_LIBWASM_OBJECTREPOSITORY_HXX
 
+#include "../network/Connection.hxx"
+
 namespace astron { // open namespace
 
-    class ObjectRepository {
+    class ObjectRepository : public Connection {
     public:
         ObjectRepository();
+        ~ObjectRepository();
     };
 } // close namespace
 

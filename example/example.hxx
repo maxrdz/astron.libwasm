@@ -30,11 +30,11 @@ PT(AsyncTaskManager) taskMgr = AsyncTaskManager::get_global_ptr();
 PT(ClockObject) globalClock = ClockObject::get_global_clock();
 #endif
 
-#include "../src/client/ClientConnection.hxx"
+#include "../src/client/ClientRepository.hxx"
 
 namespace astron
 {
-    class MyReactor : public ClientConnection {
+    class MyReactor : public ClientRepository {
     public:
         MyReactor() {};
         void run(std::string astron_addr);
