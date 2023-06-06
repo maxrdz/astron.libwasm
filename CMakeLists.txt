@@ -64,6 +64,7 @@ if(USE_PANDA)
     # Panda WebGL port requires these compiler/linker flags.
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-exceptions -fno-rtti")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -s DISABLE_EXCEPTION_THROWING=0 -fno-exceptions -fno-rtti")
+    add_compile_definitions(PANDA_WASM_COMPATIBLE)
 endif()
 if(WASM64)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -sMEMORY64=1")

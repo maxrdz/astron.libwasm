@@ -61,7 +61,10 @@ namespace astron { // open namespace
                 std::stringstream err_str;
                 err_str << "dg tried to add data past max datagram size, buf_offset+len("
                         << new_offset << ")" << " max_size(" << DGSIZE_MAX << ")" << std::endl;
+
+#ifndef PANDA_WASM_COMPATIBLE // exceptions disabled when building for linking with panda
                 throw DatagramOverflow(err_str.str());
+#endif
             }
 
             if (new_offset > buf_cap) {
