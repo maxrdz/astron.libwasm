@@ -5,44 +5,43 @@
  * license. You should have received a copy of this license along
  * with this source code in a file named "COPYING".
  *
- * @file internal-example.cxx
+ * @file example.cxx
  * @author Max Rodriguez
- * @date 2023-04-30
+ * @date 2023-06-05
  */
+
+#include "example.hxx"
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
 #endif
+
 #ifdef HAVE_PANDA
 #include <panda3d-webgl/pandaFramework.h>
 #include <panda3d-webgl/pandaSystem.h>
 #include <panda3d-webgl/genericAsyncTask.h>
 #include <panda3d-webgl/asyncTaskManager.h>
-
-// must use extern "C" to avoid mangling the function name
-// or else the linker will claim these are undefined symbols.
-extern "C" void init_libOpenALAudio();
-extern "C" void init_libpnmimagetypes();
-extern "C" void init_libwebgldisplay();
-
-// Global stuff
-PT(AsyncTaskManager) taskMgr = AsyncTaskManager::get_global_ptr();
-PT(ClockObject) globalClock = ClockObject::get_global_clock();
 #endif
 
-#include "../src/client/ClientConnection.hxx"
 using namespace astron;
-
-class MyReactor : public ClientConnection {
-public:
-    MyReactor() {};
-    void run(std::string astron_addr);
-};
 
 void MyReactor::run(std::string astron_addr) {
     connect(astron_addr, (uint32_t)0x5d7939, "v0.0.0");
+#ifdef HAVE_PANDA
+    // add our datagram poll task
+    taskMgr->add(new GenericAsyncTask("Calls poll_datagram()", &astron_poll, this));
+#else
     poll_forever(); // have the library create an emscripten main loop for you
+#endif
 }
+
+#ifdef HAVE_PANDA
+AsyncTask::DoneStatus MyReactor::astron_poll(GenericAsyncTask *task, void *data) {
+    MyReactor* app = static_cast<MyReactor*>(data);
+    app->poll_datagram();
+    return AsyncTask::DS_cont; // repeat next panda frame
+}
+#endif
 
 int main(int argc, char* argv[]) {
 #ifdef HAVE_PANDA
@@ -68,6 +67,7 @@ int main(int argc, char* argv[]) {
     reactor->run("127.0.0.1:8080"); // websocket proxy on loop back interface (proxying to client agent)
 
 #ifdef HAVE_PANDA
+    // start the framework main loop
     framework.main_loop();
     framework.close_framework();
 #endif
