@@ -14,10 +14,11 @@
 #error Currently astron.libwasm only targets WebAssembly. Please build with Emscripten.
 #endif // __EMSCRIPTEN__
 
+#include <vector>
 #include <emscripten/websocket.h>
-#include "Datagram.hxx"
-#include "../client/messageTypes.hxx"
 #include "Connection.hxx"
+#include "Datagram.hxx"
+#include "DatagramIterator.hxx"
 
 namespace astron { // open namespace
 
@@ -45,11 +46,13 @@ namespace astron { // open namespace
     void Connection::em_main_loop(void *arg)
     {
         Connection* self = static_cast<Connection*>(arg);
+
         // if socket is not ready, don't do anything this 'frame'
         unsigned short socket_ready_state;
         emscripten_websocket_get_ready_state(self->get_em_socket(), &socket_ready_state);
         if (!socket_ready_state) return;
-        self->poll_datagram();
+
+        self->handle_datagram();
     }
 
     /* Polls datagrams forever using an emscripten loop.
@@ -59,8 +62,17 @@ namespace astron { // open namespace
      * using the `new` operator. If this instance is allocated on the stack,
      * then once the main loop is set, the instance is destroyed and issues occur.
      * */
-    void Connection::poll_forever() {
-        emscripten_set_main_loop_arg(this->em_main_loop, this, this->em_loop_fps, this->em_simulate_infinite_loop);
+    void Connection::poll_forever()
+    {
+        m_is_forever = true;
+        emscripten_set_main_loop_arg(this->em_main_loop, this, m_em_loop_fps, m_em_simulate_infinite_loop);
+    }
+
+    void Connection::poll_till_empty()
+    {
+        while (!m_received_datagrams.empty()) {
+            handle_datagram();
+        }
     }
 
     void Connection::connect_socket(std::string url)
@@ -70,7 +82,7 @@ namespace astron { // open namespace
 
         // create a new emscripten websocket
         EmscriptenWebSocketCreateAttributes ws_attributes;
-        if (this->secure_websocket) { url.insert(0, "wss://"); } else { url.insert(0, "ws://"); }
+        if (m_secure_websocket) { url.insert(0, "wss://"); } else { url.insert(0, "ws://"); }
         ws_attributes.url = url.c_str();
         ws_attributes.protocols = "binary";
         ws_attributes.createOnMainThread = EM_TRUE;
@@ -133,8 +145,9 @@ namespace astron { // open namespace
         emscripten_websocket_send_binary(m_socket, packet_data, packet_len);
     }
 
-    void Connection::poll_datagram()
+    void Connection::handle_datagram()
     {
+        // Subclasses of `Connection` override this method. (i.e. ClientRepository)
     }
 
     EM_BOOL Connection::on_error(int eventType, const EmscriptenWebSocketErrorEvent *websocketEvent, void *userData)
@@ -147,13 +160,23 @@ namespace astron { // open namespace
         Connection* self = static_cast<Connection*>(userData);
         self->logger().fatal() << "Received Emscripten WebSocket error event!";
         g_logger->js_flush();
-        return 1;
+        return EM_TRUE;
     }
 
     EM_BOOL Connection::on_message(int eventType, const EmscriptenWebSocketMessageEvent *websocketEvent, void *userData)
     {
         Connection* self = static_cast<Connection*>(userData);
-        return 1;
+        const uint8_t* data = websocketEvent->data;
+        uint32_t length = websocketEvent->numBytes;
+
+        DatagramPtr dg = Datagram::create(); // store binary data into datagram
+        dg->add_blob(data, static_cast<dgsize_t>(length));
+
+        DatagramIterator dgi = DatagramIterator(dg, 0); // create dgi to read data easily
+        uint16_t dg_size_tag = dgi.read_uint16(); // TODO: Use dg_size_tag to determine if multiple dgs were received.
+
+        self->_add_datagram_data(dgi.read_remainder()); // add datagram data to m_received_datagrams
+        return EM_TRUE;
     }
 
     EM_BOOL Connection::on_open(int eventType, const EmscriptenWebSocketOpenEvent *websocketEvent, void *userData)
@@ -161,7 +184,7 @@ namespace astron { // open namespace
         Connection* self = static_cast<Connection*>(userData);
         self->logger().debug() << "Received Emscripten WebSocket open event!";
         g_logger->js_flush();
-        return 1;
+        return EM_TRUE;
     }
 
     EM_BOOL Connection::on_close(int eventType, const EmscriptenWebSocketCloseEvent *websocketEvent, void *userData)
@@ -170,19 +193,28 @@ namespace astron { // open namespace
         self->logger().debug() << "Received Emscripten WebSocket close event.";
         g_logger->js_flush();
         self->_call_handle_disconnect();
-        return 1;
+        return EM_TRUE;
     }
 
-    /* Called after disconnect occurs. Can be overridden by the user. */
-    void Connection::handle_disconnect() {
+    void Connection::handle_disconnect()
+    {
+        // Called after disconnect occurs. Can be overridden by the user.
     }
 
-    /* needed for static callback to access this function */
-    void Connection::_call_handle_disconnect() {
+    /* static callback for message event needs to access this method */
+    void Connection::_add_datagram_data(std::vector<uint8_t> bytes)
+    {
+        m_received_datagrams.push_back(std::move(bytes));
+    }
+
+    /* static callback needs to access handle_disconnect() via this method */
+    void Connection::_call_handle_disconnect()
+    {
         this->handle_disconnect();
     }
 
-    EMSCRIPTEN_WEBSOCKET_T Connection::get_em_socket() {
+    EMSCRIPTEN_WEBSOCKET_T Connection::get_em_socket()
+    {
         return m_socket;
     }
 

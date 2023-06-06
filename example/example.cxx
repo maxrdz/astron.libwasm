@@ -38,7 +38,7 @@ void MyReactor::run(std::string astron_addr) {
 #ifdef HAVE_PANDA
 AsyncTask::DoneStatus MyReactor::astron_poll(GenericAsyncTask *task, void *data) {
     MyReactor* app = static_cast<MyReactor*>(data);
-    app->poll_datagram();
+    app->poll_till_empty();
     return AsyncTask::DS_cont; // repeat next panda frame
 }
 #endif

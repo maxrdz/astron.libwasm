@@ -27,6 +27,8 @@
 
 namespace astron { // open namespace
 
+#ifndef PANDA_WASM_COMPATIBLE // exceptions disabled when building for linking with panda
+
     // A DatagramIteratorEOF is an exception that is thrown when attempting to read
     // past the end of a datagram.
     class DatagramIteratorEOF : public std::runtime_error
@@ -42,6 +44,7 @@ namespace astron { // open namespace
     public:
         FieldConstraintViolation(const std::string &what) : std::runtime_error(what) { }
     };
+#endif
 
     // A DatagramIterator lets you step through a datagram by reading a single value at a time.
     class DatagramIterator
@@ -57,7 +60,9 @@ namespace astron { // open namespace
                 std::stringstream error;
                 error << "dgi tried to read past dg end, offset+length(" << m_offset + length << ")"
                       << " buf_size(" << m_dg->size() << ")" << std::endl;
+#ifndef PANDA_WASM_COMPATIBLE // exceptions disabled when building for linking with panda
                 throw DatagramIteratorEOF(error.str());
+#endif
             };
         }
     public:
@@ -306,7 +311,9 @@ namespace astron { // open namespace
                         std::stringstream error;
                         error << "Failed to unpack numeric-type field of type " << num->get_alias()
                               << " due to value range constraint violation";
+#ifndef PANDA_WASM_COMPATIBLE // exceptions disabled when building for linking with panda
                         throw FieldConstraintViolation(error.str());
+#endif
                     }
                 }
 
@@ -317,7 +324,9 @@ namespace astron { // open namespace
                             std::stringstream error;
                             error << "Failed to unpack fixed-length string field of type " << dtype->get_alias()
                                   << " due to string encoding type violation";
+#ifndef PANDA_WASM_COMPATIBLE // exceptions disabled when building for linking with panda
                             throw FieldConstraintViolation(error.str());
+#endif
                         }
                     }
                 }
@@ -357,7 +366,9 @@ namespace astron { // open namespace
                                 std::stringstream error;
                                 error << "Failed to unpack variable-length string field of type "
                                       << dtype->get_alias() << " due to string encoding type violation";
+#ifndef PANDA_WASM_COMPATIBLE // exceptions disabled when building for linking with panda
                                 throw FieldConstraintViolation(error.str());
+#endif
                             }
                         }
 
@@ -374,7 +385,9 @@ namespace astron { // open namespace
                         std::stringstream error;
                         error << "Failed to unpack variable-length field of type " << array->get_alias()
                               << " due to element count constraint violation (got " << elem_cnt << ")";
+#ifndef PANDA_WASM_COMPATIBLE // exceptions disabled when building for linking with panda
                         throw FieldConstraintViolation(error.str());
+#endif
                     }
 
                     break;
@@ -460,9 +473,12 @@ namespace astron { // open namespace
         {
             if(m_dg->size() > 0) {
                 return *(uint8_t*)(m_dg->get_data());
-            } else {
-                throw DatagramIteratorEOF("Cannot read header from empty datagram.");
             }
+#ifndef PANDA_WASM_COMPATIBLE // exceptions disabled when building for linking with panda
+            throw DatagramIteratorEOF("Cannot read header from empty datagram.");
+#else
+            return (uint8_t)1; // silences warn
+#endif
         }
 
         // get_sender returns the datagram's sender. Does not advance the offset.
