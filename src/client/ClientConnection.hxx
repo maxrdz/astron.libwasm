@@ -29,10 +29,6 @@ namespace astron { // open namespace
         // connect starts a connection to the server, negotiates Hello and starts sending
         // heartbeats periodically. It returns after negotiation is complete.
         void connect(std::string uri, uint32_t dc_hash, std::string version);
-
-        // disconnect cleanly closes the connection.
-        // Internally: Sends a CLIENT_DISCONNECT, and waits for connection to close.
-        void disconnect();
     };
 } // close namespace
 

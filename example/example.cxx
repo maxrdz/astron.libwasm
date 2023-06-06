@@ -40,7 +40,7 @@ public:
 };
 
 void MyReactor::run(std::string astron_addr) {
-    connect(astron_addr, (uint32_t)0, "v0.0.0");
+    connect(astron_addr, (uint32_t)0x5d7939, "v0.0.0");
     poll_forever(); // have the library create an emscripten main loop for you
 }
 

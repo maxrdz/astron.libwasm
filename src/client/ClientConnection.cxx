@@ -34,7 +34,4 @@ namespace astron { // open namespace
         connect_socket(uri); // connect websocket
     }
 
-    void ClientConnection::disconnect() {
-    }
-
 } // close namespace

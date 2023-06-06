@@ -34,7 +34,9 @@ namespace astron { // open namespace
         }
         void connect_socket(std::string url); // does not send Astron messages, just connects the websocket
         void poll_forever();
+        void send_datagram(const DatagramPtr &dg);
         void poll_datagram();
+
         EMSCRIPTEN_RESULT disconnect(unsigned short code, const char *reason);
         EMSCRIPTEN_WEBSOCKET_T get_em_socket();
         void _call_handle_disconnect(); // needed for static callback to access this function

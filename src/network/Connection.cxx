@@ -120,14 +120,21 @@ namespace astron { // open namespace
         return res;
     }
 
-    void Connection::poll_datagram() {
-        //Datagram dg = Datagram();
-        //dg.add_uint16((uint16_t)CLIENT_HELLO); // msg type
-        //dg.add_uint32((uint32_t)0); // dc hash
-        //dg.add_string("v0.0.0"); // version string
-        //uint32_t dataLen = (uint32_t)dg.size();
-        //void* data = (void*)dg.get_data();
-        //emscripten_websocket_send_binary(m_socket, data, dataLen);
+    void Connection::send_datagram(const DatagramPtr &dg)
+    {
+        DatagramPtr packet_dg = Datagram::create();
+        packet_dg->add_uint16(dg->size()); // add uint16_t dg size header
+        packet_dg->add_data(dg->get_data(), dg->size());
+
+        uint32_t packet_len = static_cast<uint32_t>(packet_dg->size());
+        uint8_t* dg_data = const_cast<uint8_t*>(packet_dg->get_data());
+        void* packet_data = static_cast<void*>(dg_data); // ^^ so many casts ... necessary.
+
+        emscripten_websocket_send_binary(m_socket, packet_data, packet_len);
+    }
+
+    void Connection::poll_datagram()
+    {
     }
 
     EM_BOOL Connection::on_error(int eventType, const EmscriptenWebSocketErrorEvent *websocketEvent, void *userData)
