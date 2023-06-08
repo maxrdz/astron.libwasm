@@ -15,6 +15,8 @@ For the internal (server-side) implementation of Astron, check out [astron.libts
 
 # Building from Source
 
+The following instructions assume that you're using a Linux based or Unix-like Operating System.
+
 Before compiling the source code, you first need to generate the Makefile using CMake.
 **NOTE:** You need to run `emcmake` to run cmake so that it sets the various
 environment variables that are needed for CMake to generate for the em++ compiler.
