@@ -133,6 +133,6 @@ set(SOURCE_FILES
 add_library(astron STATIC ${SOURCE_FILES}) # builds libastron.a
 
 if(BUILD_EXAMPLE) # build example WASM binaries
-    set(CMAKE_EXECUTABLE_SUFFIX ".html") # Output Emscripten's HTML wrapper
+    #set(CMAKE_EXECUTABLE_SUFFIX ".html") # Output Emscripten's HTML wrapper
     add_subdirectory(example)
 endif()

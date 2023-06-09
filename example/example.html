@@ -1,0 +1,13 @@
+<html lang="en-us">
+<head>
+<title>Astron Test</title>
+<style>
+    body { margin: 0; }  /* the canvas *must not* have any border or padding, or mouse coords will be wrong */
+    canvas.emscripten { border: 0px none; background-color: black }
+</style>
+</head>
+<body>
+<canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()" tabindex=-1></canvas>
+<script async type="text/javascript" src="example.js"></script>
+</body>
+</html>
