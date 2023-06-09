@@ -21,6 +21,9 @@
 #include <panda3d-webgl/pandaSystem.h>
 #include <panda3d-webgl/genericAsyncTask.h>
 #include <panda3d-webgl/asyncTaskManager.h>
+#include <panda3d-webgl/cardMaker.h>
+#include <panda3d-webgl/pandaNode.h>
+#include <panda3d-webgl/nodePath.h>
 #endif
 
 using namespace astron;
@@ -53,8 +56,17 @@ int main(int argc, char* argv[]) {
     PandaFramework framework;
     framework.open_framework(argc, argv);
     WindowFramework *window = framework.open_window();
-    // set clear buffer color
-    window->get_graphics_window()->set_clear_color(LVecBase4(0.5f, 0.5f, 0.5f, 1.0f)); // r g b a
+
+    window->enable_keyboard(); // Enable keyboard detection
+    window->setup_trackball(); // Enable default camera movement
+
+    // create a quad to test
+    CardMaker quad = CardMaker("card");
+    quad.set_frame_fullscreen_quad();
+    PT(PandaNode) quad_node = quad.generate(); // equivalent of std::shared_ptr, but panda manages references
+    // make a nodepath object for quad
+    NodePath quad_np = NodePath(quad_node);
+    quad_np.reparent_to(window->get_render());
 #endif
 
     /* It is VITAL that you dynamically allocate `MyReactor` via `new`.
