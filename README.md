@@ -46,14 +46,13 @@ It is then statically linked to the example program(s). You can view the
 [CMakeLists.txt](./CMakeLists.txt) file and how it links with Panda.
 
 Once you have the static libraries built, copy the `.a` (or `.lib`) files
-over to the `example/` directory of this repository. Use the `-DUSE_PANDA` flag when compiling the examples.
+over to the `example/` directory of this repository. Use the `-DUSE_PANDA=1` flag when compiling the examples.
 Read the CMakeLists.txt file for specific instructions on where to move the generated Panda headers.
 
 For instructions on building Panda3D for WebGL with Emscripten, see
 [the building instructions](https://rdb.name/panda3d-webgl.md.html) written by rdb.
 
-**NOTE:** As of June 2023, I do have Panda linked with the example program correctly,
-but there is an issue with no output on the canvas. I haven't been able to resolve this issue.
+Feel free to also check out my [detailed build guide at the Panda3D discourse](https://discourse.panda3d.org/t/guide-to-using-c-panda3d-for-webgl-using-emscripten/29400).
 
 # Troubleshooting
 
