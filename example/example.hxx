@@ -28,22 +28,24 @@ extern "C" void init_libwebgldisplay();
 // Global stuff
 PT(AsyncTaskManager) taskMgr = AsyncTaskManager::get_global_ptr();
 PT(ClockObject) globalClock = ClockObject::get_global_clock();
+NodePath camera;
 #endif
 
 #include "../src/client/ClientRepository.hxx"
 
 namespace astron
 {
-    class MyReactor : public ClientRepository {
-    public:
-        MyReactor() {};
-        void run(std::string astron_addr);
+class MyReactor : public ClientRepository
+{
+  public:
+    MyReactor() {};
+    void run(std::string astron_addr);
 
-    private:
+  private:
 #ifdef HAVE_PANDA // define AstronPoll panda task
-        static AsyncTask::DoneStatus astron_poll(GenericAsyncTask *task, void *data);
+    static AsyncTask::DoneStatus astron_poll(GenericAsyncTask *task, void *data);
 #endif
-    };
+};
 }
 
 #endif //ASTRON_LIBWASM_EXAMPLE_HXX

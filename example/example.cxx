@@ -21,6 +21,7 @@
 #include <panda3d-webgl/pandaSystem.h>
 #include <panda3d-webgl/genericAsyncTask.h>
 #include <panda3d-webgl/asyncTaskManager.h>
+#include <panda3d-webgl/load_prc_file.h>
 #include <panda3d-webgl/cardMaker.h>
 #include <panda3d-webgl/pandaNode.h>
 #include <panda3d-webgl/nodePath.h>
@@ -28,7 +29,8 @@
 
 using namespace astron;
 
-void MyReactor::run(std::string astron_addr) {
+void MyReactor::run(std::string astron_addr)
+{
     connect(astron_addr, (uint32_t)0x5d7939, "v0.0.0");
 #ifdef HAVE_PANDA
     // add our datagram poll task
@@ -39,19 +41,24 @@ void MyReactor::run(std::string astron_addr) {
 }
 
 #ifdef HAVE_PANDA
-AsyncTask::DoneStatus MyReactor::astron_poll(GenericAsyncTask *task, void *data) {
+AsyncTask::DoneStatus MyReactor::astron_poll(GenericAsyncTask *task, void *data)
+{
     MyReactor* app = static_cast<MyReactor*>(data);
     app->poll_till_empty();
     return AsyncTask::DS_cont; // repeat next panda frame
 }
 #endif
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
 #ifdef HAVE_PANDA
+    // Load PRC engine configuration file
+    load_prc_file("engine-config.prc");
     // Initialize Panda libraries
     init_libOpenALAudio();
     init_libpnmimagetypes();
     init_libwebgldisplay();
+
     // Open a new window framework
     PandaFramework framework;
     framework.open_framework(argc, argv);
@@ -64,6 +71,7 @@ int main(int argc, char* argv[]) {
     CardMaker quad = CardMaker("card");
     quad.set_frame_fullscreen_quad();
     PT(PandaNode) quad_node = quad.generate(); // equivalent of std::shared_ptr, but panda manages references
+
     // make a nodepath object for quad
     NodePath quad_np = NodePath(quad_node);
     quad_np.reparent_to(window->get_render());

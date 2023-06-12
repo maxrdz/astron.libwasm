@@ -8,9 +8,13 @@ if(USE_PANDA) # if USE_PANDA=1, link with the Panda3D webgl-port static librarie
     # NOTE: All panda static libraries (.a / .lib) should be under the `example/` directory.
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -L${CMAKE_CURRENT_SOURCE_DIR} -L/usr/local/lib")
 
-    # Assuming you built Panda with the following dependencies: ZLib (static libraries)
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lz -lpanda -lpandaexpress \
-    -lp3dtool -lp3dtoolconfig -lp3webgldisplay -lp3framework -lp3openal_audio -lp3interrogatedb -lp3direct")
+    # Assuming you built Panda with the following dependencies
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lpanda -lpandaexpress \
+        -lp3dtool -lp3dtoolconfig -lp3webgldisplay -lp3framework -lp3openal_audio -lp3interrogatedb -lp3direct")
+
+    # Have Emscripten pull the following panda dependencies from emscripten-ports
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -s USE_ZLIB=1 \
+        -s USE_VORBIS=1 -s USE_HARFBUZZ=1 -s USE_FREETYPE=1 -s USE_LIBPNG=1")
 
     # Copy the include/ folder built by Panda (when you built it targeting Emscripten) to
     # /usr/local/include and rename it to 'panda3d-webgl'.
@@ -18,7 +22,8 @@ if(USE_PANDA) # if USE_PANDA=1, link with the Panda3D webgl-port static librarie
 
     # Additional linker flags as used in 'freezify.py' from rdb's panda webgl samples
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -s MAX_WEBGL_VERSION=2 -s NO_EXIT_RUNTIME=1 \
-    -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s DISABLE_EXCEPTION_THROWING=0 -s ALLOW_MEMORY_GROWTH -fno-exceptions -fno-rtti")
+        -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s DISABLE_EXCEPTION_THROWING=0 \
+        -s ALLOW_MEMORY_GROWTH -fno-exceptions -fno-rtti")
 endif()
 
 if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
