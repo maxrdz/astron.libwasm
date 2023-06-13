@@ -13,7 +13,6 @@
 namespace dclass   // open namespace dclass
 {
 
-
 // A HashGenerator generates an arbitrary hash number from a sequence of ints.
 class HashGenerator
 {
@@ -32,7 +31,6 @@ class HashGenerator
     uint32_t m_hash;
     unsigned int m_index;
 };
-
 
 } // close namespace dclass
 

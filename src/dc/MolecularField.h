@@ -5,7 +5,6 @@
 namespace dclass   // open namespace dclass
 {
 
-
 // A MolecularField is an abstract field which provides an interface that can
 //     be used to access multiple other fields at the same time.
 class MolecularField : public Field, public Struct
@@ -38,6 +37,5 @@ class MolecularField : public Field, public Struct
   protected:
     using Field::set_id;
 };
-
 
 } // close namespace dclass

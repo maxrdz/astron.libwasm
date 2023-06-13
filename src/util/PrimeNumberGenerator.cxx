@@ -46,5 +46,4 @@ unsigned int PrimeNumberGenerator::operator [](unsigned int n)
     return m_primes[n];
 }
 
-
 } // close namespace dclass

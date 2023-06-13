@@ -14,7 +14,6 @@
 namespace dclass   // open namespace dclass
 {
 
-
 // Type constructor
 NumericType::NumericType(Type type) :
     m_divisor(1), m_orig_modulus(0.0), m_orig_range()
@@ -207,47 +206,47 @@ std::pair<bool, Number> NumericType::data_to_number(const std::vector<uint8_t>* 
     }
 
     switch(m_type) {
-        case T_INT8: {
-            int64_t val = *(int8_t*)&data->front();
-            return std::make_pair(true, Number(val));
-        }
-        case T_INT16: {
-            int64_t val = *(int16_t*)&data->front();
-            return std::make_pair(true, Number(val));
-        }
-        case T_INT32: {
-            int64_t val = *(int32_t*)&data->front();
-            return std::make_pair(true, Number(val));
-        }
-        case T_INT64: {
-            return std::make_pair(true, Number(*(int64_t*)&data->front()));
-        }
-        case T_CHAR:
-        case T_UINT8: {
-            uint64_t val = *(uint8_t*)&data->front();
-            return std::make_pair(true, Number(val));
-        }
-        case T_UINT16: {
-            uint64_t val = *(uint16_t*)&data->front();
-            return std::make_pair(true, Number(val));
-        }
-        case T_UINT32: {
-            uint64_t val = *(uint32_t*)&data->front();
-            return std::make_pair(true, Number(val));
-        }
-        case T_UINT64: {
-            return std::make_pair(true, Number(*(uint64_t*)&data->front()));
-        }
-        case T_FLOAT32: {
-            double val = *(float*)&data->front();
-            return std::make_pair(true, Number(val));
-        }
-        case T_FLOAT64: {
-            return std::make_pair(true, Number(*(double*)&data->front()));
-        }
-        default: {
-            break;
-        }
+    case T_INT8: {
+        int64_t val = *(int8_t*)&data->front();
+        return std::make_pair(true, Number(val));
+    }
+    case T_INT16: {
+        int64_t val = *(int16_t*)&data->front();
+        return std::make_pair(true, Number(val));
+    }
+    case T_INT32: {
+        int64_t val = *(int32_t*)&data->front();
+        return std::make_pair(true, Number(val));
+    }
+    case T_INT64: {
+        return std::make_pair(true, Number(*(int64_t*)&data->front()));
+    }
+    case T_CHAR:
+    case T_UINT8: {
+        uint64_t val = *(uint8_t*)&data->front();
+        return std::make_pair(true, Number(val));
+    }
+    case T_UINT16: {
+        uint64_t val = *(uint16_t*)&data->front();
+        return std::make_pair(true, Number(val));
+    }
+    case T_UINT32: {
+        uint64_t val = *(uint32_t*)&data->front();
+        return std::make_pair(true, Number(val));
+    }
+    case T_UINT64: {
+        return std::make_pair(true, Number(*(uint64_t*)&data->front()));
+    }
+    case T_FLOAT32: {
+        double val = *(float*)&data->front();
+        return std::make_pair(true, Number(val));
+    }
+    case T_FLOAT64: {
+        return std::make_pair(true, Number(*(double*)&data->front()));
+    }
+    default: {
+        break;
+    }
     }
 
     return std::make_pair(false, Number(0));
@@ -261,7 +260,7 @@ bool NumericType::within_range(const std::vector<uint8_t>* data, uint64_t length
     if(!result.first) {
         return false;
     }
-  
+
     return m_range.contains(result.second);
 }
 
@@ -278,6 +277,5 @@ void NumericType::generate_hash(HashGenerator &hashgen) const
         hashgen.add_int(int(m_range.max.integer));
     }
 }
-
 
 } // close namespace dclass

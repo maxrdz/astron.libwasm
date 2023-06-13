@@ -124,5 +124,4 @@ void Struct::generate_hash(HashGenerator& hashgen) const
     }
 }
 
-
 } // close namespace dclass

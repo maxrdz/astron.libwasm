@@ -7,7 +7,6 @@
 namespace dclass   // open namespace dclass
 {
 
-
 #ifdef DCLASS_32BIT_SIZETAG
 typedef uint32_t sizetag_t;
 #else
@@ -20,7 +19,6 @@ class Method;
 class NumericType;
 class Struct;
 class HashGenerator;
-
 
 // The Type enum are numeric constants representing the layout of the DistributedType
 enum Type {
@@ -102,7 +100,6 @@ class DistributedType
     sizetag_t m_size;
     std::string m_alias;
 };
-
 
 } // close namespace dclass
 #include "DistributedType.ipp"

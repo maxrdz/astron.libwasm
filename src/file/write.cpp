@@ -6,7 +6,6 @@ using namespace std;
 namespace dclass   // open namespace dclass
 {
 
-
 ostream& indent(ostream& out, unsigned int indent_level)
 {
     for(unsigned int i = 0; i < indent_level; i++) {
@@ -62,7 +61,6 @@ string format_type(unsigned int type)
         return "error";
     }
 }
-
 
 } // close namespace dclass
 

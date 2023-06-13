@@ -6,7 +6,6 @@
 namespace dclass   // open namespace dclass
 {
 
-
 // constructor
 MolecularField::MolecularField(Class* cls, const std::string &name) :
     Field(nullptr, name), Struct(cls->get_file())
@@ -91,6 +90,5 @@ void MolecularField::generate_hash(HashGenerator& hashgen) const
         hashgen.add_int(it->get_id());
     }
 }
-
 
 } // close namespace dclass

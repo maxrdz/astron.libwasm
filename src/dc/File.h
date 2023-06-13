@@ -7,7 +7,6 @@
 namespace dclass   // open namespace
 {
 
-
 // Forward declarations
 class DistributedType;
 class Class;
@@ -116,7 +115,6 @@ class File
     std::vector<DistributedType*> m_types_by_id;
     std::unordered_map<std::string, DistributedType*> m_types_by_name;
 };
-
 
 } // close namespace dclass
 #include "File.ipp"

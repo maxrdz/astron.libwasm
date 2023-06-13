@@ -8,7 +8,6 @@
 namespace dclass   // open namespace
 {
 
-
 typedef std::unordered_map<std::string, DistributedType*>::value_type TypeName;
 
 // constructor
@@ -190,6 +189,5 @@ void File::generate_hash(HashGenerator& hashgen) const
         hashgen.add_string(*it);
     }
 }
-
 
 } // close namespace dclass

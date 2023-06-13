@@ -8,7 +8,6 @@ using namespace std;
 namespace dclass   // open namespace
 {
 
-
 // constructor
 Class::Class(File* file, const string &name) : Struct(file, name), m_constructor(nullptr)
 {
@@ -252,6 +251,5 @@ void Class::generate_hash(HashGenerator& hashgen) const
         (*it)->generate_hash(hashgen);
     }
 }
-
 
 } // close namespace dclass

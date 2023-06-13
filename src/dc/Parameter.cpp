@@ -8,7 +8,6 @@
 namespace dclass   // open namespace dclass
 {
 
-
 // constructor
 Parameter::Parameter(DistributedType* type, const std::string& name) :
     m_name(name), m_type(type), m_method(nullptr), m_has_default_value(false)
@@ -80,6 +79,5 @@ void Parameter::generate_hash(HashGenerator& hashgen) const
 {
     m_type->generate_hash(hashgen);
 }
-
 
 } // close namespace dclass

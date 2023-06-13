@@ -8,7 +8,6 @@ using namespace std;
 namespace dclass   // open namespace dclass
 {
 
-
 // append opens the given file or stream and parses it as a .dc file.  The distributed
 //     classes defined in the file are added to the list of classes associated with the File.
 //     When appending from a stream, a filename is optional only used to report errors.
@@ -53,6 +52,5 @@ File* read(const string &filename)
 
     return nullptr;
 }
-
 
 } // close namespace dclass

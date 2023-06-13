@@ -10,7 +10,6 @@
 namespace dclass   // open namespace dclass
 {
 
-
 // We multiply each consecutive integer by the next prime number and
 // add it to the total.  This will generate pretty evenly-distributed
 // hash numbers for an arbitrary sequence of ints.
@@ -49,6 +48,5 @@ uint32_t HashGenerator::get_hash() const
 {
     return (uint32_t)(m_hash & 0xffffffff);
 }
-
 
 } // close namespace dclass

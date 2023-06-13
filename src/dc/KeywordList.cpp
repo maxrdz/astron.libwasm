@@ -4,7 +4,6 @@
 namespace dclass   // open namespace dclass
 {
 
-
 // empty list constructor
 KeywordList::KeywordList()
 {
@@ -73,6 +72,5 @@ void KeywordList::generate_hash(HashGenerator &hashgen) const
         hashgen.add_string(*it);
     }
 }
-
 
 } // close namespace dclass

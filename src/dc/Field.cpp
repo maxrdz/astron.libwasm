@@ -90,5 +90,4 @@ void Field::generate_hash(HashGenerator& hashgen) const
     KeywordList::generate_hash(hashgen);
 }
 
-
 } // close namespace dclass

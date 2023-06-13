@@ -5,7 +5,6 @@
 namespace dclass   // open namespace
 {
 
-
 // A Class is a special type of struct that have a couple advanced object-oriented features:
 //     Classes can inherit from other classes (ie. have super-/sub-classes).
 //     Classes can have methods including a special constructor method.
@@ -70,7 +69,6 @@ class Class : public Struct
     std::vector<Class*> m_parents;
     std::vector<Class*> m_children;
 };
-
 
 } // close namespace dclass
 #include "Class.ipp"

@@ -18,7 +18,6 @@ using namespace std;
 namespace dclass   // open namespace dclass
 {
 
-
 static void hash_file(HashGenerator& hashgen, const File* file);
 static void hash_class(HashGenerator& hashgen, const Class* cls);
 static void hash_struct(HashGenerator& hashgen, const Struct* strct);
@@ -131,7 +130,6 @@ void hash_field(HashGenerator& hashgen, const Field* field)
         return;
     }
 
-
     /* Handle DCAtomicField */
     if(field->get_type()->get_type() == T_METHOD) {
         // DCField::generate_hash()
@@ -150,7 +148,6 @@ void hash_field(HashGenerator& hashgen, const Field* field)
         hash_keywords(hashgen, field);
         return;
     }
-
 
     /* Handle DCSimpleParameter, DCClassParameter, DCArrayParameter */
     // DCParameter::generate_hash()
@@ -363,7 +360,6 @@ void hash_legacy_type(HashGenerator& hashgen, const DistributedType* type)
     }
 }
 
-
 void hash_int_type(HashGenerator& hashgen, const NumericType* numeric)
 {
     hashgen.add_int(numeric->get_divisor());
@@ -379,6 +375,5 @@ void hash_int_type(HashGenerator& hashgen, const NumericType* numeric)
         hashgen.add_int(int(floor(rng.max.floating * numeric->get_divisor() + 0.5)));
     }
 }
-
 
 } // close namespace dclass

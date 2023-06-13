@@ -12,7 +12,6 @@
 namespace dclass   // open namespace
 {
 
-
 // type constructor
 ArrayType::ArrayType(DistributedType* element_type, const NumericRange& size) :
     m_element_type(element_type), m_array_range(size)
@@ -39,8 +38,6 @@ ArrayType::ArrayType(DistributedType* element_type, const NumericRange& size) :
         m_type = T_VARARRAY;
         m_size = 0;
     }
-
-
 
     if(m_element_type->get_type() == T_CHAR) {
         if(m_type == T_ARRAY) {
@@ -92,6 +89,5 @@ void ArrayType::generate_hash(HashGenerator& hashgen) const
         hashgen.add_int(m_array_size);
     }
 }
-
 
 } // close namespace dclass

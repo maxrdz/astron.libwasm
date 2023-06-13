@@ -5,7 +5,6 @@
 namespace dclass   // open namespace dclass
 {
 
-
 // Forward declaration
 class HashGenerator;
 
@@ -45,6 +44,5 @@ class KeywordList
     std::vector<std::string> m_keywords; // the actual list of keywords
     std::unordered_set<std::string> m_keywords_by_name; // a map of name to keywords in list
 };
-
 
 } // close namespace dclass

@@ -7,7 +7,6 @@ using namespace std;
 namespace dclass   // open namespace
 {
 
-
 // constructor
 Method::Method() : m_has_constraint(false)
 {
@@ -86,6 +85,5 @@ void Method::generate_hash(HashGenerator& hashgen) const
         it->generate_hash(hashgen);
     }
 }
-
 
 } // close namespace dclass

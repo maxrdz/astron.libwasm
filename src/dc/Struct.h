@@ -8,7 +8,6 @@
 namespace dclass   // open namespace
 {
 
-
 // Foward declarations
 class HashGenerator;
 class File;
@@ -79,7 +78,6 @@ class Struct : public DistributedType
 
     bool m_has_constraint;
 };
-
 
 } // close namespace dclass
 #include "Struct.ipp"

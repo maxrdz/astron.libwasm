@@ -4,7 +4,6 @@
 namespace dclass   // open namespace dclass
 {
 
-
 // Foward declarations
 class DistributedType;
 class Method;
@@ -59,7 +58,6 @@ class Parameter
     bool m_has_default_value; // is true if an explicity default has been set
     std::string m_default_value; // the binary data of the default value encoded in a string
 };
-
 
 } // close namespace dclass
 #include "Parameter.ipp"

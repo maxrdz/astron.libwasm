@@ -48,8 +48,7 @@ extern int yydebug;
 /* Token kinds.  */
 #ifndef YYTOKENTYPE
 # define YYTOKENTYPE
-  enum yytokentype
-  {
+enum yytokentype {
     YYEMPTY = -2,
     YYEOF = 0,                     /* "end of file"  */
     YYerror = 256,                 /* error  */
@@ -81,17 +80,14 @@ extern int yydebug;
     KW_STRING = 282,               /* KW_STRING  */
     KW_BLOB = 283,                 /* KW_BLOB  */
     KW_CHAR = 284                  /* KW_CHAR  */
-  };
-  typedef enum yytokentype yytoken_kind_t;
+};
+typedef enum yytokentype yytoken_kind_t;
 #endif
 
 /* Value type.  */
 
-
 extern YYSTYPE yylval;
 
-
-int yyparse (void);
-
+int yyparse(void);
 
 #endif /* !YY_YY_PARSER_H_INCLUDED  */

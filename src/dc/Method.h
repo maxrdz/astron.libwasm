@@ -46,6 +46,5 @@ class Method final : public DistributedType
     bool m_has_constraint;
 };
 
-
 } // close namespace dclass
 #include "Method.ipp"

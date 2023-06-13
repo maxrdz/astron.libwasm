@@ -5,7 +5,6 @@
 namespace dclass   // open namespace dclass
 {
 
-
 // A NumericType can represent any of the basic number types (ie. integers, floats, etc).
 //     A NumericType may also have a range and/or modulus to limit its possible values,
 //     and/or a divisor representing a fixed-point numeric convention.
@@ -61,7 +60,6 @@ class NumericType : public DistributedType
     Number m_modulus;
     NumericRange m_range;
 };
-
 
 } // close namespace dclass
 #include "NumericType.ipp"

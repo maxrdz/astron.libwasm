@@ -7,7 +7,6 @@
 namespace dclass   // open namespace
 {
 
-
 // An ArrayType represents an array of some other kind of object, meaning
 //     this parameter type accepts an arbitrary (or possibly fixed) number of
 //     nested fields, all of which are of the same type.
@@ -47,7 +46,6 @@ class ArrayType : public DistributedType
     unsigned int m_array_size; // number of elements in the array if it is a constant (or 0)
     NumericRange m_array_range; // the range of possible elements in the array
 };
-
 
 } // close namespace dclass
 #include "ArrayType.ipp"

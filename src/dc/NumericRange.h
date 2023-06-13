@@ -4,7 +4,6 @@
 namespace dclass   // open namespace dclass
 {
 
-
 // A Number represent any C++ numeric type.
 struct Number {
     enum Type {
@@ -89,6 +88,5 @@ struct NumericRange {
         return (type == Number::NONE);
     }
 };
-
 
 } // close namespace dclass

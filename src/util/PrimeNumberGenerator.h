@@ -30,7 +30,6 @@ class PrimeNumberGenerator
     std::vector<unsigned int> m_primes;
 };
 
-
 } // close namespace dclass
 
 #endif // ASTRON_LIBWASM_PRIMENUMBERGENERATOR_H

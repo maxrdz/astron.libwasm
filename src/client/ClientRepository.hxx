@@ -17,20 +17,22 @@
 #include "../util/Logger.hxx"
 #include "../object/ObjectRepository.hxx"
 
-namespace astron { // open namespace
+namespace astron   // open namespace
+{
 // Implementation Notes:
 //     If necessary connection can subclass another class (maybe NetworkClient for example);
 //     However, any inherited virtual functions must be implemented. Subclasses of connection
 //     should only be required to implement handle_datagram.
-    class ClientRepository : public ObjectRepository {
-    public:
-        ClientRepository();
-        ~ClientRepository();
+class ClientRepository : public ObjectRepository
+{
+  public:
+    ClientRepository();
+    ~ClientRepository();
 
-        // connect starts a connection to the server, negotiates Hello and starts sending
-        // heartbeats periodically. It returns after negotiation is complete.
-        void connect(std::string uri, uint32_t dc_hash, std::string version);
-    };
+    // connect starts a connection to the server, negotiates Hello and starts sending
+    // heartbeats periodically. It returns after negotiation is complete.
+    void connect(std::string uri, uint32_t dc_hash, std::string version);
+};
 } // close namespace
 
 #endif //ASTRON_LIBWASM_CLIENTCONNECTION_HXX

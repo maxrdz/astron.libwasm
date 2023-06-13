@@ -2,7 +2,6 @@
 namespace dclass   // open namespace dclass
 {
 
-
 // null constructor
 inline DistributedType::DistributedType() :
     m_type(T_INVALID), m_size(0)
@@ -40,7 +39,7 @@ inline const std::string& DistributedType::get_alias() const
 // set_alias gives this type the alternate name <alias>.
 inline void DistributedType::set_alias(const std::string& alias)
 {
-	m_alias = alias;
+    m_alias = alias;
 }
 
 } // close namespace dclass

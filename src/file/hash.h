@@ -4,7 +4,6 @@
 namespace dclass   // open namespace
 {
 
-
 // Forward declarations
 class File;
 
@@ -19,6 +18,5 @@ uint32_t structural_hash(const File*);
 
 // legacy_hash produces a hash which matches that of the old dcparser.
 uint32_t legacy_hash(const File*);
-
 
 } // close namespace dclass

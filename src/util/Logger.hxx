@@ -68,74 +68,83 @@ extern NullStream null_stream;
 extern NullBuffer null_buffer;
 
 // A LoggerBuf is a stream buffer that outputs to either a file or the console (std::cout).
-class LoggerBuf : public std::streambuf {
-public:
+class LoggerBuf : public std::streambuf
+{
+  public:
     LoggerBuf(std::string *buffer);
     LoggerBuf(std::string *buffer, const std::string &file_name, bool output_to_console = true);
 
-protected:
+  protected:
     int overflow(int c = EOF);
     std::streamsize xsputn(const char* s, std::streamsize n);
-private:
+  private:
     std::string *m_buffer;
     std::ofstream m_file;
     bool m_has_file;
     bool m_output_to_console;
 };
 
-class LockedLogOutput {
-public:
-    LockedLogOutput(std::ostream *stream, std::recursive_mutex *lock) : m_stream(stream), m_lock(lock) {
-        if (m_lock) {
+class LockedLogOutput
+{
+  public:
+    LockedLogOutput(std::ostream *stream, std::recursive_mutex *lock) : m_stream(stream), m_lock(lock)
+    {
+        if(m_lock) {
             m_lock->lock();
         }
     }
 
-    LockedLogOutput(const LockedLogOutput& other) : m_stream(other.m_stream), m_lock(other.m_lock) {
-        if (m_lock) {
+    LockedLogOutput(const LockedLogOutput& other) : m_stream(other.m_stream), m_lock(other.m_lock)
+    {
+        if(m_lock) {
             m_lock->lock();
         }
     }
 
     LockedLogOutput& operator=(const LockedLogOutput&) = delete;   // non copyable
 
-    ~LockedLogOutput() {
+    ~LockedLogOutput()
+    {
         if(m_lock) {
             m_lock->unlock();
         }
     }
 
     template <typename T>
-    LockedLogOutput &operator<<(const T &x) {
-        if (m_stream) {
+    LockedLogOutput &operator<<(const T &x)
+    {
+        if(m_stream) {
             *m_stream << x;
         }
         return *this;
     }
 
-    LockedLogOutput& operator<<(std::ostream & (*pf)(std::ostream&)) {
-        if (m_stream) {
+    LockedLogOutput& operator<<(std::ostream & (*pf)(std::ostream&))
+    {
+        if(m_stream) {
             *m_stream << pf;
         }
         return *this;
     }
 
-    LockedLogOutput& operator<<(std::basic_ios<char>& (*pf)(std::basic_ios<char>&)) {
-        if (m_stream) {
+    LockedLogOutput& operator<<(std::basic_ios<char>& (*pf)(std::basic_ios<char>&))
+    {
+        if(m_stream) {
             *m_stream << pf;
         }
         return *this;
     }
 
-private:
+  private:
     std::ostream *m_stream;
     std::recursive_mutex *m_lock;
 };
 
 // A Logger is an object that allows configuration of the output destination of log messages.
 // It provides a stream as an output mechanism.
-class Logger {
-public:
+class Logger
+{
+  public:
     Logger(const std::string &log_file, LogSeverity sev, bool console_output = true);
     Logger();
 
@@ -156,7 +165,7 @@ public:
     void js_flush();
 #endif // __EMSCRIPTEN__
 
-private:
+  private:
     const char* get_severity_color(LogSeverity sev);
 
     LoggerBuf m_buf;
@@ -169,18 +178,23 @@ private:
 
 // A LogCategory is a wrapper for a Logger object that specially formats the output
 // for consistency, parsability, and ease of convenience with LogSeverities.
-class LogCategory {
-public:
-    LogCategory(const std::string &id, const std::string &name) : m_id(id), m_name(name) {
+class LogCategory
+{
+  public:
+    LogCategory(const std::string &id, const std::string &name) : m_id(id), m_name(name)
+    {
     }
 
-    LogCategory(const char* id, const std::string &name) : m_id(id), m_name(name) {
+    LogCategory(const char* id, const std::string &name) : m_id(id), m_name(name)
+    {
     }
 
-    LogCategory(const char* id, const char* name) : m_id(id), m_name(name) {
+    LogCategory(const char* id, const char* name) : m_id(id), m_name(name)
+    {
     }
 
-    void set_name(const std::string &name) {
+    void set_name(const std::string &name)
+    {
         m_name = name;
     }
 
@@ -205,17 +219,20 @@ public:
 #else
     // packet() provides a stream with the time and "PACKET" severity preprended to the message.
     // packet messages are only output when compiled with -DCMAKE_BUILD_TYPE=Debug.
-    inline NullStream &packet() {
+    inline NullStream &packet()
+    {
         return null_stream;
     }
     // trace() provides a stream with the time and "TRACE" severity preprended to the message.
     // trace messages are only output when compiled with -DCMAKE_BUILD_TYPE=Debug.
-    inline NullStream &trace() {
+    inline NullStream &trace()
+    {
         return null_stream;
     }
     // debug() provides a stream with the time and "DEBUG" severity preprended to the message.
     // debug messages are only output when compiled with -DCMAKE_BUILD_TYPE=Debug.
-    inline NullStream &debug() {
+    inline NullStream &debug()
+    {
         return null_stream;
     }
 
@@ -238,37 +255,41 @@ public:
 
 #undef F
 
-private:
+  private:
     std::string m_id;
     std::string m_name;
 };
-
-
 
 /* ========================== *
  *       HELPER CLASSES       *
  * ========================== */
 // NullBuffer is used to make streams that log in cases when we do not
 // want to compile the message out (for example, when the LogSeverity is configurable)
-class NullBuffer : public std::streambuf {
-public:
-    int overflow(int c) {
+class NullBuffer : public std::streambuf
+{
+  public:
+    int overflow(int c)
+    {
         return c;
     }
 };
 
 // NullStream is used with pre-processor definitions to define a stream that when
 // logged to, will be reduced to a no-op and compiled out.
-class NullStream {
-public:
-    void setFile() {
+class NullStream
+{
+  public:
+    void setFile()
+    {
         /* no-op */
     }
     template<typename TPrintable>
-    inline NullStream& operator<<(TPrintable const&) {
+    inline NullStream& operator<<(TPrintable const&)
+    {
         return null_stream;
     }
-    inline NullStream& operator<<(std::ostream & (std::ostream&)) {
+    inline NullStream& operator<<(std::ostream & (std::ostream&))
+    {
         return null_stream;
     }
 };

@@ -5,7 +5,6 @@
 namespace dclass   // open namespace dclass
 {
 
-
 // Foward declarations
 class File;
 
@@ -20,6 +19,5 @@ bool append(File* f, const std::string &filename);
 //     When reading from a stream, a filename is optional only used when reporting errors.
 File* read(std::istream &in, const std::string &filename);
 File* read(const std::string &filename);
-
 
 } // close namespace dclass
