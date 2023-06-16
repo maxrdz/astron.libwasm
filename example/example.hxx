@@ -35,15 +35,25 @@ NodePath camera;
 
 namespace astron
 {
-class MyReactor : public ClientRepository
+class MyApp : public ClientRepository
 {
   public:
-    MyReactor() {};
+    MyApp() {};
     void run(std::string astron_addr);
 
+    /* Used at resize_panda_window() panda task */
+    double _win_height = 0.0f;
+    double _win_width = 0.0f;
+
+#ifdef HAVE_PANDA
+    PandaFramework m_framework;
+    WindowFramework *p_window;
+#endif
+
   private:
-#ifdef HAVE_PANDA // define AstronPoll panda task
+#ifdef HAVE_PANDA
     static AsyncTask::DoneStatus astron_poll(GenericAsyncTask *task, void *data);
+    static AsyncTask::DoneStatus resize_panda_window(GenericAsyncTask *task, void *data);
 #endif
 };
 }

@@ -1,15 +1,13 @@
 <!DOCTYPE html>
 <html lang="en-us">
 <head>
-<title>Astron Example</title>
 <style>
-    body { margin: 0; background-color: black; }
-    /* the canvas *must not* have any border or padding, or mouse coords will be wrong */
-    canvas.emscripten { border: 0px none; background-color: black; }
+    body {margin: 0; background-color: black; overflow: hidden}
+    #canvas {border: 0 none; background: #000000; width: 100vw; height: 100vh}
 </style>
 </head>
 <body>
-<canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()" tabindex=-1></canvas>
+<canvas id="canvas" oncontextmenu="event.preventDefault()" tabindex=-1></canvas>
 <script async type="text/javascript" src="example.js"></script>
 </body>
 </html>
