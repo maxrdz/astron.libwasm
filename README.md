@@ -31,6 +31,14 @@ $ emcmake cmake . -Bbuild-release -DCMAKE_BUILD_TYPE=Release
 $ cd build-release && make
 ```
 
+CMake generates a Makefile by default. If you would like to use Ninja as 
+your generator, use the following shell command instead.
+
+```bash
+$ emcmake cmake . -GNinja -Bbuild-release -DCMAKE_BUILD_TYPE=Release
+$ cd build-release && ninja
+```
+
 astron.libwasm is always compiled as a static library, not Web Assembly. It is compiled with Emscripten
 so that your own application can be linked with this static library and target Web Assembly.
 

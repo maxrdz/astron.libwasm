@@ -28,23 +28,26 @@ set(CXX_STANDARD_REQUIRED ON)
 # ======================================
 
 # Use the Boost headers from emscripten-ports. Was previously required, now it's not used.
-option(USE_BOOST "Passes `-sUSE_BOOST_HEADERS=1` to the compiler & linker." false)
+option(USE_BOOST "Passes `-sUSE_BOOST_HEADERS=1` to the compiler & linker." OFF)
 
 # (ONLY applies to example target) Link with Panda3D (webgl-port) static libraries.
 # The WebGL port of Panda3D is WIP. For instructions on building, see: https://rdb.name/panda3d-webgl.md.html
-option(USE_PANDA "Link example WASM with WebGL Panda3D static libraries. Read CMakeLists.txt for more info." false)
+option(USE_PANDA "Link example WASM with WebGL Panda3D static libraries. Read CMakeLists.txt for more info." OFF)
 
 # Enables compiling & linking to wasm64. This is currently experimental in Emscripten!
-option(WASM64 "Passes `-sMEMORY64=1` to the compiler & linker. This is experimental! Default: false." false)
+option(WASM64 "Passes `-sMEMORY64=1` to the compiler & linker. This is experimental! Default: false." OFF)
 
 # Use 32-bit datagram length tags
-option(USE_32BIT_DATAGRAMS "Datagrams and dclass fields will use 32-bit length tags instead of 16-bit." false)
+option(USE_32BIT_DATAGRAMS "Datagrams and dclass fields will use 32-bit length tags instead of 16-bit." OFF)
 
 # Use 128-bit channel IDs over the wire
-option(USE_128BIT_CHANNELS "Compile with support for 128-bit channel IDs. Experimental." false)
+option(USE_128BIT_CHANNELS "Compile with support for 128-bit channel IDs. Experimental." OFF)
 
 # Build example WASM binaries with static library
-option(BUILD_EXAMPLE "Builds the example WASM binaries along with the static library." true)
+option(BUILD_EXAMPLE "Builds the example WASM binaries along with the static library." ON)
+
+# Force build generator to use ANSI-colored output (Fixes no color output using Ninja)
+option(FORCE_COLORED_OUTPUT "Always produce ANSI-colored output (GNU/Clang only)." ON)
 
 # ===============================================
 # ========== Compiler / Linker Flags ============
@@ -92,6 +95,20 @@ if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
     add_compile_definitions(ASTRON_DEBUG_MESSAGES) # enable astron logger debug output
 else()
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -g0 -Oz")
+endif()
+
+# ======================================
+# ============= Hot Fixes ==============
+# ======================================
+
+# Enable GCC/clang ANSI-colored terminal output using Ninja build tool
+# TODO: Switch to `CMAKE_COLOR_DIAGNOSTICS` with cmake 3.24 in the future
+if (FORCE_COLORED_OUTPUT)
+    if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+        add_compile_options(-fdiagnostics-color=always)
+    elseif (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+        add_compile_options(-fcolor-diagnostics)
+    endif()
 endif()
 
 # ===============================================
