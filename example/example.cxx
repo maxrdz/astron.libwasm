@@ -77,31 +77,6 @@ AsyncTask::DoneStatus MyApp::resize_panda_window(GenericAsyncTask *task, void *d
     return AsyncTask::DS_cont;
 }
 
-AsyncTask::DoneStatus MyApp::update_a2d_nodes_to_aspect_ratio(GenericAsyncTask *task, void *data)
-{
-    MyApp* app = static_cast<MyApp*>(data);
-
-    // get graphics window dimensions for aspect ratio
-    int x_size = app->p_window->get_graphics_window()->get_sbs_left_x_size();
-    int y_size = app->p_window->get_graphics_window()->get_sbs_left_y_size();
-    float aspect_ratio = static_cast<float>(x_size) / static_cast<float>(y_size);
-
-    app->a2dLeft = aspect_ratio * -1.0f;
-    app->a2dRight = aspect_ratio;
-
-    // update their corresponding coordinates
-    app->a2dTopCenter.set_pos(0.0f, 0.0f, app->a2dTop);
-    app->a2dBottomCenter.set_pos(0.0f, 0.0f, app->a2dBottom);
-    app->a2dLeftCenter.set_pos(app->a2dLeft, 0.0f, 0.0f);
-    app->a2dRightCenter.set_pos(app->a2dRight, 0.0f, 0.0f);
-    app->a2dTopLeft.set_pos(app->a2dLeft, 0.0f, app->a2dTop);
-    app->a2dTopRight.set_pos(app->a2dRight, 0.0f, app->a2dTop);
-    app->a2dBottomLeft.set_pos(app->a2dLeft, 0.0f, app->a2dBottom);
-    app->a2dBottomRight.set_pos(app->a2dRight, 0.0f, app->a2dBottom);
-
-    return AsyncTask::DS_cont;
-}
-
 void MyApp::gui_button_toggle_fullscreen_callback(const Event *ev, void *data)
 {
     MyApp* app = static_cast<MyApp*>(data);
@@ -141,41 +116,17 @@ int main(int argc, char* argv[])
     app->m_framework.set_window_title("Panda Window"); // not ported on webgl port yet
     app->p_window = app->m_framework.open_window();
     app->p_window->enable_keyboard();
-    app->camera = app->p_window->get_camera_group(); // get the camera and store it
+    app->camera = app->p_window->get_camera_group();
 
     app->camera.set_pos(0, 0, 60);
     app->camera.look_at(0, 0, 0);
-
-    /* Create our own 8 node paths (children of aspect2d) to represent the edges / corners of
-     * the panda window, adjusted every frame by the window's aspect ratio.
-     * This way, GUI elements that should be anchored to an edge / corner of the window
-     * at all times should be parented to their corresponding a2dxxx node.
-     *
-     * These nodes are created by ShowBase in Panda's Python DIRECT API, but not in C++... So recreated it myself.
-     */
-
-    NodePath aspect2d = app->p_window->get_aspect_2d();
-
-    // Attach new a2dxxx nodes to aspect2d
-    app->a2dTopCenter = aspect2d.attach_new_node("a2dTopCenter");
-    app->a2dBottomCenter = aspect2d.attach_new_node("a2dBottomCenter");
-    app->a2dLeftCenter = aspect2d.attach_new_node("a2dLeftCenter");
-    app->a2dRightCenter = aspect2d.attach_new_node("a2dRightCenter");
-    app->a2dTopLeft = aspect2d.attach_new_node("a2dTopLeft");
-    app->a2dTopRight = aspect2d.attach_new_node("a2dTopRight");
-    app->a2dBottomLeft = aspect2d.attach_new_node("a2dBottomLeft");
-    app->a2dBottomRight = aspect2d.attach_new_node("a2dBottomRight");
-
-    // Add Panda task to update the scaling and coordinates of these nodes per frame
-    taskMgr->add(new GenericAsyncTask("update a2d helper nodes coordinates",
-                                      &MyApp::update_a2d_nodes_to_aspect_ratio, app));
 
     // Load the GUI elements
     PT(PGButton) toggle_fullscreen;
     toggle_fullscreen = new PGButton("toggle_fullscreen_button");
     toggle_fullscreen->setup("Toggle Fullscreen", 0);
 
-    NodePath toggle_fullscreen_np = app->a2dTopRight.attach_new_node(toggle_fullscreen);
+    NodePath toggle_fullscreen_np = app->p_window->get_a2d_top_right().attach_new_node(toggle_fullscreen);
     toggle_fullscreen_np.set_scale(0.05);
     toggle_fullscreen_np.set_pos(-0.7, 0, -0.07);
 
