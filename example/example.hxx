@@ -28,7 +28,6 @@ extern "C" void init_libwebgldisplay();
 // Global stuff
 PT(AsyncTaskManager) taskMgr = AsyncTaskManager::get_global_ptr();
 PT(ClockObject) globalClock = ClockObject::get_global_clock();
-NodePath camera;
 #endif
 
 #include "../src/client/ClientRepository.hxx"
@@ -48,12 +47,29 @@ class MyApp : public ClientRepository
 #ifdef HAVE_PANDA
     PandaFramework m_framework;
     WindowFramework *p_window;
-#endif
+    NodePath camera;
 
-  private:
-#ifdef HAVE_PANDA
+    /* Our own NodePaths that represent the aspect2d
+     * coordinates of different edges / corners of the window.
+     */
+    NodePath a2dTopCenter;
+    NodePath a2dBottomCenter;
+    NodePath a2dLeftCenter;
+    NodePath a2dRightCenter;
+    NodePath a2dTopLeft;
+    NodePath a2dTopRight;
+    NodePath a2dBottomLeft;
+    NodePath a2dBottomRight;
+
+    float a2dTop = 1.0f;
+    float a2dBottom = -1.0f;
+    float a2dLeft; // set to aspect ratio
+    float a2dRight; // negative of aspect ratio
+
     static AsyncTask::DoneStatus astron_poll(GenericAsyncTask *task, void *data);
     static AsyncTask::DoneStatus resize_panda_window(GenericAsyncTask *task, void *data);
+    static AsyncTask::DoneStatus update_a2d_nodes_to_aspect_ratio(GenericAsyncTask *task, void *data);
+    static void gui_button_toggle_fullscreen_callback(const Event *ev, void *data);
 #endif
 };
 }
