@@ -9,6 +9,9 @@ CMakeFiles/
 *.cmake
 CMakeCache.txt
 Makefile
+# Python Environment
+venv/
+.venv/
 # AStyle
 *.orig
 # Compiled Object files
